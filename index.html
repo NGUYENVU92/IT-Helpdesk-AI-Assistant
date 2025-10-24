@@ -1,0 +1,4538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Helpdesk AI Assistant</title>
+    <style>
+        :root {
+            /* Primitive Color Tokens */
+            --color-white: rgba(255, 255, 255, 1);
+            --color-black: rgba(0, 0, 0, 1);
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-400: rgba(45, 166, 178, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-teal-800: rgba(41, 150, 161, 1);
+            --color-red-400: rgba(255, 84, 89, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+            --color-orange-400: rgba(230, 129, 97, 1);
+            --color-orange-500: rgba(168, 75, 47, 1);
+        
+            /* RGB versions for opacity control */
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-slate-500-rgb: 98, 108, 113;
+            --color-red-500-rgb: 192, 21, 47;
+            --color-red-400-rgb: 255, 84, 89;
+            --color-orange-500-rgb: 168, 75, 47;
+            --color-orange-400-rgb: 230, 129, 97;
+        
+            /* Background color tokens (Light Mode) */
+            --color-bg-1: rgba(59, 130, 246, 0.08);
+            --color-bg-2: rgba(245, 158, 11, 0.08);
+            --color-bg-3: rgba(34, 197, 94, 0.08);
+            --color-bg-4: rgba(239, 68, 68, 0.08);
+            --color-bg-5: rgba(147, 51, 234, 0.08);
+            --color-bg-6: rgba(249, 115, 22, 0.08);
+            --color-bg-7: rgba(236, 72, 153, 0.08);
+            --color-bg-8: rgba(6, 182, 212, 0.08);
+        
+            /* Semantic Color Tokens (Light Mode) */
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-secondary-active: rgba(var(--color-brown-600-rgb), 0.25);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-card-border: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-card-border-inner: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-error: var(--color-red-500);
+            --color-success: var(--color-teal-500);
+            --color-warning: var(--color-orange-500);
+            --color-info: var(--color-slate-500);
+            --color-focus-ring: rgba(var(--color-teal-500-rgb), 0.4);
+            --color-select-caret: rgba(var(--color-slate-900-rgb), 0.8);
+        
+            /* Common style patterns */
+            --focus-ring: 0 0 0 3px var(--color-focus-ring);
+            --focus-outline: 2px solid var(--color-primary);
+            --status-bg-opacity: 0.15;
+            --status-border-opacity: 0.25;
+        
+            /* Typography */
+            --font-family-base: "FKGroteskNeue", "Geist", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            --font-family-mono: "Berkeley Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-md: 14px;
+            --font-size-lg: 16px;
+            --font-size-xl: 18px;
+            --font-size-2xl: 20px;
+            --font-size-3xl: 24px;
+            --font-size-4xl: 30px;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 550;
+            --font-weight-bold: 600;
+            --line-height-tight: 1.2;
+            --line-height-normal: 1.5;
+            --letter-spacing-tight: -0.01em;
+        
+            /* Spacing */
+            --space-0: 0;
+            --space-1: 1px;
+            --space-2: 2px;
+            --space-4: 4px;
+            --space-6: 6px;
+            --space-8: 8px;
+            --space-10: 10px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --space-32: 32px;
+        
+            /* Border Radius */
+            --radius-sm: 6px;
+            --radius-base: 8px;
+            --radius-md: 10px;
+            --radius-lg: 12px;
+            --radius-full: 9999px;
+        
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+        
+            /* Animation */
+            --duration-fast: 150ms;
+            --duration-normal: 250ms;
+            --ease-standard: cubic-bezier(0.16, 1, 0.3, 1);
+        
+            /* Custom chat colors */
+            --chat-primary: #2563eb;
+            --chat-primary-light: #3b82f6;
+            --chat-secondary: #f3f4f6;
+            --chat-dark-gray: #374151;
+            --online-green: #10b981;
+        }
+        
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-200-rgb: 245, 245, 245;
+                --color-bg-1: rgba(29, 78, 216, 0.15);
+                --color-bg-2: rgba(180, 83, 9, 0.15);
+                --color-bg-3: rgba(21, 128, 61, 0.15);
+                --color-bg-4: rgba(185, 28, 28, 0.15);
+                --color-bg-5: rgba(107, 33, 168, 0.15);
+                --color-bg-6: rgba(194, 65, 12, 0.15);
+                --color-bg-7: rgba(190, 24, 93, 0.15);
+                --color-bg-8: rgba(8, 145, 178, 0.15);
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-primary-hover: var(--color-teal-400);
+                --color-primary-active: var(--color-teal-800);
+                --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+                --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+                --color-secondary-active: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-error: var(--color-red-400);
+                --color-success: var(--color-teal-300);
+                --color-warning: var(--color-orange-400);
+                --color-info: var(--color-gray-300);
+                --color-focus-ring: rgba(var(--color-teal-300-rgb), 0.4);
+                --color-btn-primary-text: var(--color-slate-900);
+                --color-card-border: rgba(var(--color-gray-400-rgb), 0.2);
+                --color-card-border-inner: rgba(var(--color-gray-400-rgb), 0.15);
+                --shadow-inset-sm: inset 0 1px 0 rgba(255, 255, 255, 0.1), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+                --color-select-caret: rgba(var(--color-gray-200-rgb), 0.8);
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-16) var(--space-20);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+        }
+        
+        .header h1 {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text);
+        }
+        
+        .online-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            padding: var(--space-4) var(--space-12);
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: #10b981;
+        }
+        
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: onlinePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes onlinePulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(1.1);
+            }
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: var(--space-16);
+        }
+        
+        .integration-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            transition: background-color var(--duration-fast) var(--ease-standard);
+        }
+        
+        .status-dot.green {
+            background: var(--online-green);
+            animation: pulse 2s infinite;
+        }
+        
+        .status-dot.gray {
+            background: var(--color-text-secondary);
+        }
+        
+        .settings-btn {
+            background: none;
+            border: none;
+            font-size: var(--font-size-xl);
+            cursor: pointer;
+            padding: var(--space-8);
+            border-radius: var(--radius-base);
+            transition: all var(--duration-fast) var(--ease-standard);
+            color: var(--color-text-secondary);
+            border: 2px solid transparent;
+        }
+        
+        .settings-btn:hover {
+            background: var(--color-secondary);
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+            transform: rotate(90deg);
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: var(--font-size-lg);
+            cursor: pointer;
+            padding: var(--space-4);
+            border-radius: var(--radius-base);
+            transition: all var(--duration-fast) var(--ease-standard);
+            color: var(--color-text-secondary);
+        }
+        
+        .theme-toggle:hover {
+            background: var(--color-secondary);
+            color: var(--color-text);
+            transform: rotate(15deg);
+        }
+        
+        .header-stats {
+            display: flex;
+            gap: var(--space-16);
+        }
+        
+        .stat-item {
+            text-align: center;
+            font-size: var(--font-size-xs);
+        }
+        
+        .stat-value {
+            display: block;
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary);
+        }
+        
+        .stat-label {
+            color: var(--color-text-secondary);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Chat Container */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--space-20);
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-16);
+            scroll-behavior: smooth;
+        }
+        
+        /* Messages */
+        .message {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-12);
+            animation: messageAppear 0.3s ease-out;
+        }
+        
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.user {
+            flex-direction: row-reverse;
+        }
+        
+        .message-content {
+            max-width: 70%;
+            padding: var(--space-12) var(--space-16);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-base);
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        
+        .message.ai .message-content {
+            background: var(--color-surface);
+            color: var(--color-text);
+            border: 1px solid var(--color-card-border);
+            box-shadow: var(--shadow-xs);
+        }
+        
+        .message.user .message-content {
+            background: var(--chat-primary);
+            color: white;
+        }
+        
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: var(--font-size-sm);
+            flex-shrink: 0;
+        }
+        
+        .message.ai .message-avatar {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+        
+        .message.user .message-avatar {
+            background: var(--color-secondary);
+            color: var(--color-text);
+        }
+        
+        .message-time {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            margin-top: var(--space-4);
+            padding: 0 var(--space-4);
+        }
+        
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+        }
+        
+        .typing-dots {
+            display: flex;
+            gap: var(--space-4);
+            padding: var(--space-12) var(--space-16);
+            background: var(--color-surface);
+            border: 1px solid var(--color-card-border);
+            border-radius: var(--radius-lg);
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--color-text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            padding: var(--space-16) var(--space-20);
+            border-top: 1px solid var(--color-border);
+            background: var(--color-surface);
+        }
+        
+        .quick-actions h3 {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-12);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--space-8);
+        }
+        
+        .quick-action-btn {
+            padding: var(--space-12) var(--space-16);
+            border: 1px solid var(--color-border);
+            background: var(--color-surface);
+            color: var(--color-text);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--ease-standard);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-8);
+            position: relative;
+            box-shadow: var(--shadow-xs);
+            min-height: 60px;
+        }
+        
+        .quick-action-btn:hover {
+            background: var(--color-primary);
+            border-color: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .quick-action-btn .icon {
+            font-size: var(--font-size-lg);
+            margin-right: var(--space-4);
+        }
+        
+        .tooltip {
+            position: absolute;
+            background: var(--color-charcoal-800);
+            color: white;
+            padding: var(--space-6) var(--space-8);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            white-space: nowrap;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-4px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--duration-fast) var(--ease-standard);
+            z-index: 100;
+        }
+        
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 4px solid transparent;
+            border-top-color: var(--color-charcoal-800);
+        }
+        
+        .quick-action-btn:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(-8px);
+        }
+        
+        /* Input Area */
+        .input-area {
+            padding: var(--space-16) var(--space-20);
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+        }
+        
+        .input-controls {
+            display: flex;
+            gap: var(--space-8);
+            margin-bottom: var(--space-12);
+        }
+        
+        .new-conversation-btn {
+            padding: var(--space-6) var(--space-12);
+            background: var(--color-secondary);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .new-conversation-btn:hover {
+            background: var(--color-secondary-hover);
+        }
+        
+        .input-container {
+            display: flex;
+            gap: var(--space-8);
+            align-items: flex-end;
+        }
+        
+        .input-field {
+            flex: 1;
+            padding: var(--space-12) var(--space-16);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            background: var(--color-background);
+            color: var(--color-text);
+            font-family: var(--font-family-base);
+            font-size: var(--font-size-base);
+            resize: vertical;
+            min-height: 44px;
+            max-height: 120px;
+            transition: border-color var(--duration-fast) var(--ease-standard);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: var(--focus-ring);
+        }
+        
+        .send-btn {
+            padding: var(--space-12) var(--space-16);
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            transition: all var(--duration-fast) var(--ease-standard);
+            min-width: 60px;
+        }
+        
+        .send-btn:hover {
+            background: var(--color-primary-hover);
+        }
+        
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        /* Escalation Button */
+        .escalation-btn {
+            margin-top: var(--space-12);
+            padding: var(--space-8) var(--space-16);
+            background: var(--color-warning);
+            color: white;
+            border: none;
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .escalation-btn:hover {
+            background: var(--color-orange-500);
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .header {
+                padding: var(--space-12) var(--space-16);
+            }
+        
+            .header h1 {
+                font-size: var(--font-size-lg);
+            }
+        
+            .chat-messages {
+                padding: var(--space-16);
+            }
+        
+            .message-content {
+                max-width: 85%;
+            }
+        
+            .quick-actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        
+            .input-area {
+                padding: var(--space-12) var(--space-16);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .quick-actions-grid {
+                grid-template-columns: 1fr;
+            }
+        
+            .message-content {
+                max-width: 95%;
+            }
+        }
+        
+        /* Modal Styles */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--duration-normal) var(--ease-standard);
+        }
+        
+        .modal-backdrop.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(-20px);
+            transition: transform var(--duration-normal) var(--ease-standard);
+        }
+        
+        .modal-backdrop.active .modal {
+            transform: scale(1) translateY(0);
+        }
+        
+        /* Settings Panel Slide Animation */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            background: var(--color-surface);
+            box-shadow: var(--shadow-lg);
+            z-index: 1001;
+            transition: right var(--duration-normal) var(--ease-standard);
+            overflow-y: auto;
+        }
+        
+        .settings-panel.active {
+            right: 0;
+        }
+        
+        /* Settings Sections */
+        .settings-section {
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--space-20);
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-section h4 {
+            margin: 0 0 var(--space-16) 0;
+            color: var(--color-text);
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+        }
+        
+        .settings-section-icon {
+            font-size: var(--font-size-xl);
+        }
+        
+        /* ServiceNow Branding */
+        .servicenow-branding {
+            display: none;
+            background: linear-gradient(135deg, #62C353, #3F7F3C);
+            color: white;
+            padding: var(--space-12) var(--space-16);
+            border-radius: var(--radius-base);
+            margin-bottom: var(--space-16);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .servicenow-branding.active {
+            display: block;
+        }
+        
+        /* Connection Status Card */
+        .connection-status-card {
+            background: var(--color-bg-1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-lg);
+            padding: var(--space-16);
+            margin-bottom: var(--space-16);
+        }
+        
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            margin-bottom: var(--space-8);
+        }
+        
+        .status-indicator .status-dot {
+            width: 12px;
+            height: 12px;
+        }
+        
+        .status-details {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+        }
+        
+        .modal-header {
+            padding: var(--space-20) var(--space-20) var(--space-16);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .modal-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text);
+            margin: 0;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: var(--font-size-xl);
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            padding: var(--space-4);
+            border-radius: var(--radius-base);
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .close-btn:hover {
+            color: var(--color-text);
+            background: var(--color-secondary);
+        }
+        
+        .modal-body {
+            padding: var(--space-20);
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-16);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-8);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text);
+            font-size: var(--font-size-sm);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: var(--space-10) var(--space-12);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            background: var(--color-background);
+            color: var(--color-text);
+            font-size: var(--font-size-base);
+            transition: border-color var(--duration-fast) var(--ease-standard);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: var(--focus-ring);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-16);
+        }
+        
+        .password-field {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: var(--space-12);
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-sm);
+        }
+        
+        .modal-actions {
+            padding: var(--space-16) var(--space-20) var(--space-20);
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            gap: var(--space-12);
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            padding: var(--space-8) var(--space-16);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-standard);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-6);
+        }
+        
+        .btn-primary {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+        
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+        }
+        
+        .btn-secondary {
+            background: var(--color-secondary);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--color-secondary-hover);
+        }
+        
+        .btn-danger {
+            background: var(--color-error);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: var(--color-red-400);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-4);
+            padding: var(--space-4) var(--space-8);
+            border-radius: var(--radius-full);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .status-open { background: rgba(59, 130, 246, 0.1); color: #1e40af; }
+        .status-in-progress { background: rgba(245, 158, 11, 0.1); color: #92400e; }
+        .status-pending { background: rgba(249, 115, 22, 0.1); color: #9a3412; }
+        .status-resolved { background: rgba(34, 197, 94, 0.1); color: #166534; }
+        .status-closed { background: rgba(107, 114, 128, 0.1); color: #374151; }
+        
+        .priority-low { color: var(--color-success); }
+        .priority-medium { color: var(--color-warning); }
+        .priority-high { color: var(--color-error); }
+        .priority-critical { color: var(--color-red-500); font-weight: var(--font-weight-bold); }
+        
+        .ticket-timeline {
+            margin-top: var(--space-16);
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: var(--space-12);
+            margin-bottom: var(--space-12);
+        }
+        
+        .timeline-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            margin-top: var(--space-6);
+            flex-shrink: 0;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-time {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-2);
+        }
+        
+        .integration-help {
+            background: var(--color-bg-1);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            margin-bottom: var(--space-16);
+        }
+        
+        .help-section {
+            margin-bottom: var(--space-16);
+        }
+        
+        .help-section h4 {
+            margin-bottom: var(--space-8);
+            color: var(--color-text);
+        }
+        
+        .help-section code {
+            background: rgba(var(--color-slate-900-rgb), 0.1);
+            padding: var(--space-2) var(--space-4);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-sm);
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--space-16);
+        }
+        
+        .tab {
+            background: none;
+            border: none;
+            padding: var(--space-8) var(--space-16);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .tab.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Side Panels */
+        .side-panels {
+            background: var(--color-surface);
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .recent-conversations, .common-issues {
+            padding: var(--space-16) var(--space-20);
+        }
+        
+        .recent-conversations h4, .common-issues h4 {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-12);
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+        
+        .conversation-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-8);
+        }
+        
+        .conversation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--space-8) var(--space-12);
+            background: var(--color-background);
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-standard);
+            border: 1px solid var(--color-border);
+        }
+        
+        .conversation-item:hover {
+            background: var(--color-secondary);
+            transform: translateX(4px);
+        }
+        
+        .conversation-title {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .conversation-time {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+        }
+        
+        .common-issues-toggle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: var(--space-8) 0;
+            border-bottom: 1px solid var(--color-border);
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .common-issues-toggle:hover {
+            color: var(--color-primary);
+        }
+        
+        .toggle-icon {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            transition: transform var(--duration-fast) var(--ease-standard);
+        }
+        
+        .toggle-icon.expanded {
+            transform: rotate(45deg);
+        }
+        
+        .common-issues-content {
+            padding-top: var(--space-12);
+        }
+        
+        .issue-item {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            padding: var(--space-12);
+            background: var(--color-background);
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-standard);
+            margin-bottom: var(--space-8);
+            border: 1px solid var(--color-border);
+        }
+        
+        .issue-item:hover {
+            background: var(--color-bg-1);
+            transform: scale(1.02);
+            border-color: var(--color-primary);
+        }
+        
+        .issue-icon {
+            font-size: var(--font-size-xl);
+            flex-shrink: 0;
+        }
+        
+        .issue-details {
+            flex: 1;
+        }
+        
+        .issue-title {
+            display: block;
+            font-weight: var(--font-weight-medium);
+            font-size: var(--font-size-sm);
+        }
+        
+        .issue-time {
+            display: block;
+            font-size: var(--font-size-xs);
+            color: var(--color-success);
+            margin-top: var(--space-2);
+        }
+        
+        /* Enhanced Input Controls */
+        .voice-input-btn, .export-btn {
+            padding: var(--space-6) var(--space-12);
+            background: var(--color-secondary);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .voice-input-btn:hover, .export-btn:hover {
+            background: var(--color-secondary-hover);
+            transform: translateY(-1px);
+        }
+        
+        .escalation-controls {
+            padding-top: var(--space-12);
+            text-align: center;
+        }
+        
+        /* Feedback System */
+        .message-feedback {
+            display: flex;
+            align-items: center;
+            gap: var(--space-8);
+            margin-top: var(--space-8);
+            opacity: 0;
+            transition: opacity var(--duration-fast) var(--ease-standard);
+        }
+        
+        .message.ai:hover .message-feedback {
+            opacity: 1;
+        }
+        
+        .feedback-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            padding: var(--space-4);
+            border-radius: var(--radius-base);
+            transition: all var(--duration-fast) var(--ease-standard);
+            color: var(--color-text-secondary);
+        }
+        
+        .feedback-btn:hover {
+            background: var(--color-secondary);
+            transform: scale(1.1);
+        }
+        
+        .feedback-btn.active {
+            color: var(--color-primary);
+        }
+        
+        /* Message Timestamp on Hover */
+        .message-timestamp {
+            position: absolute;
+            right: var(--space-12);
+            top: var(--space-12);
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            opacity: 0;
+            transition: opacity var(--duration-fast) var(--ease-standard);
+            pointer-events: none;
+        }
+        
+        .message:hover .message-timestamp {
+            opacity: 1;
+        }
+        
+        /* Dark mode data attribute styles */
+        [data-color-scheme="dark"] {
+            /* All dark mode variables are already defined in the root CSS */
+        }
+        
+        /* Loading States */
+        .loading-state {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-8);
+        }
+        
+        .loading-pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+        
+        .loading-pulse:nth-child(2) { animation-delay: 0.2s; }
+        .loading-pulse:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes loadingPulse {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Password Reset Modal Styles */
+        .password-step {
+            min-height: 400px;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: var(--space-16);
+            margin-bottom: var(--space-24);
+        }
+        
+        .step {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--color-secondary);
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-sm);
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .step.active {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+        
+        .step.completed {
+            background: var(--color-success);
+            color: white;
+        }
+        
+        .form-help {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            margin-top: var(--space-4);
+        }
+        
+        .option-grid {
+            display: grid;
+            gap: var(--space-12);
+            margin-top: var(--space-16);
+        }
+        
+        .option-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-8);
+            padding: var(--space-16);
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-standard);
+            text-align: center;
+        }
+        
+        .option-btn:hover {
+            background: var(--color-bg-1);
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+        
+        .option-icon {
+            font-size: var(--font-size-3xl);
+        }
+        
+        .option-title {
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-base);
+            color: var(--color-text);
+        }
+        
+        .option-desc {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            margin-top: var(--space-4);
+        }
+        
+        .reset-methods {
+            display: grid;
+            gap: var(--space-12);
+        }
+        
+        .method-card {
+            padding: var(--space-16);
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all var(--duration-fast) var(--ease-standard);
+        }
+        
+        .method-card:hover {
+            background: var(--color-bg-1);
+            border-color: var(--color-primary);
+        }
+        
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-12);
+            margin-bottom: var(--space-8);
+        }
+        
+        .method-icon {
+            font-size: var(--font-size-2xl);
+        }
+        
+        .method-info {
+            flex: 1;
+        }
+        
+        .method-title {
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-base);
+            color: var(--color-text);
+        }
+        
+        .method-time {
+            font-size: var(--font-size-sm);
+            color: var(--color-success);
+            margin-top: var(--space-2);
+        }
+        
+        .method-desc {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .security-questions {
+            margin-top: var(--space-16);
+        }
+        
+        .question-group {
+            margin-bottom: var(--space-16);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: var(--color-secondary);
+            border-radius: var(--radius-full);
+            margin: var(--space-16) 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: var(--radius-full);
+            transition: width var(--duration-normal) var(--ease-standard);
+        }
+        
+        .success-message {
+            text-align: center;
+            padding: var(--space-24);
+        }
+        
+        .success-icon {
+            font-size: var(--font-size-4xl);
+            color: var(--color-success);
+            margin-bottom: var(--space-16);
+        }
+        
+        .next-steps {
+            background: var(--color-bg-3);
+            padding: var(--space-16);
+            border-radius: var(--radius-base);
+            margin-top: var(--space-16);
+        }
+        
+        .next-steps h5 {
+            margin-bottom: var(--space-8);
+            color: var(--color-text);
+        }
+        
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-list li {
+            margin-bottom: var(--space-8);
+            padding-left: var(--space-20);
+            position: relative;
+        }
+        
+        .step-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--color-success);
+            font-weight: var(--font-weight-bold);
+        }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: var(--space-20);
+            right: var(--space-20);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-8);
+            pointer-events: none;
+        }
+        
+        .toast {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--space-16);
+            box-shadow: var(--shadow-lg);
+            min-width: 320px;
+            max-width: 500px;
+            pointer-events: auto;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all var(--duration-normal) var(--ease-standard);
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-12);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--color-success);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--color-error);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--color-warning);
+        }
+        
+        .toast.info {
+            border-left: 4px solid var(--color-info);
+        }
+        
+        .toast-icon {
+            font-size: var(--font-size-lg);
+            flex-shrink: 0;
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--space-4);
+            color: var(--color-text);
+        }
+        
+        .toast-message {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.4;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-lg);
+            padding: var(--space-2);
+            border-radius: var(--radius-base);
+            transition: all var(--duration-fast) var(--ease-standard);
+            flex-shrink: 0;
+        }
+        
+        .toast-close:hover {
+            background: var(--color-secondary);
+            color: var(--color-text);
+        }
+        
+        /* Debug Console */
+        .debug-console {
+            position: fixed;
+            bottom: var(--space-20);
+            right: var(--space-20);
+            width: 400px;
+            height: 300px;
+            background: var(--color-charcoal-800);
+            color: #00ff00;
+            font-family: var(--font-family-mono);
+            font-size: var(--font-size-xs);
+            border-radius: var(--radius-lg);
+            padding: var(--space-12);
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            z-index: 1500;
+            display: none;
+        }
+        
+        .debug-console.active {
+            display: block;
+        }
+        
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: var(--space-8);
+            margin-bottom: var(--space-8);
+            color: #fff;
+        }
+        
+        .debug-log {
+            white-space: pre-wrap;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <h1>IT Helpdesk AI Assistant</h1>
+            <div class="online-status" id="onlineStatus">
+                <div class="online-dot"></div>
+                <span>Online</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="integration-status" id="integrationStatus">
+                <div class="status-dot gray" id="statusDot"></div>
+                <span id="statusText">Not Connected</span>
+                <small id="connectionDetails" style="display: none; color: var(--color-text-secondary); font-size: var(--font-size-xs); margin-left: var(--space-8);"></small>
+            </div>
+            <div class="header-stats" id="headerStats" style="display: none;">
+                <div class="stat-item">
+                    <span class="stat-value" id="ticketsToday">0</span>
+                    <span class="stat-label">Today</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="avgResolution">0h</span>
+                    <span class="stat-label">Avg Time</span>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" title="Toggle Dark/Light Mode">
+                🌙
+            </button>
+            <button class="settings-btn" id="settingsBtn" title="Integration Settings">
+                ⚙️
+            </button>
+        </div>
+    </div>
+
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <h3>Quick Actions</h3>
+        <div class="quick-actions-grid">
+            <button class="quick-action-btn" data-action="password-reset">
+                <span class="icon">🔑</span>
+                Password Reset
+                <div class="tooltip">Reset forgotten passwords or unlock accounts</div>
+            </button>
+            <button class="quick-action-btn" data-action="printer-issue">
+                <span class="icon">🖨️</span>
+                Printer Issue
+                <div class="tooltip">Fix printing problems and driver issues</div>
+            </button>
+            <button class="quick-action-btn" data-action="email-problem">
+                <span class="icon">📧</span>
+                Email Problem
+                <div class="tooltip">Resolve Outlook and email configuration issues</div>
+            </button>
+            <button class="quick-action-btn" data-action="network-issue">
+                <span class="icon">🌐</span>
+                Network Issue
+                <div class="tooltip">Troubleshoot WiFi and connectivity problems</div>
+            </button>
+            <button class="quick-action-btn" data-action="software-help">
+                <span class="icon">💻</span>
+                Software Help
+                <div class="tooltip">Get help with application issues and installations</div>
+            </button>
+            <button class="quick-action-btn" data-action="check-ticket">
+                <span class="icon">🎫</span>
+                Check Status
+                <div class="tooltip">Look up existing support tickets</div>
+            </button>
+            <button class="quick-action-btn servicenow-action" data-action="view_tickets" style="display: none;">
+                <span class="icon">📋</span>
+                My Tickets
+                <div class="tooltip">View your ServiceNow tickets</div>
+            </button>
+            <button class="quick-action-btn servicenow-action" data-action="kb_search" style="display: none;">
+                <span class="icon">📚</span>
+                Knowledge Base
+                <div class="tooltip">Search ServiceNow KB articles</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Recent Conversations & Common Issues -->
+    <div class="side-panels">
+        <div class="recent-conversations" id="recentConversations" style="display: none;">
+            <h4>Recent Conversations</h4>
+            <div class="conversation-list">
+                <div class="conversation-item">
+                    <span class="conversation-title">Password Reset Issue</span>
+                    <span class="conversation-time">2 hours ago</span>
+                </div>
+                <div class="conversation-item">
+                    <span class="conversation-title">Printer Configuration</span>
+                    <span class="conversation-time">Yesterday</span>
+                </div>
+                <div class="conversation-item">
+                    <span class="conversation-title">VPN Connection Problem</span>
+                    <span class="conversation-time">2 days ago</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="common-issues" id="commonIssues">
+            <div class="common-issues-toggle" onclick="toggleCommonIssues()">
+                <h4>Common Issues ⚡</h4>
+                <span class="toggle-icon">+</span>
+            </div>
+            <div class="common-issues-content" style="display: none;">
+                <div class="issue-item" onclick="quickResolve('password')">
+                    <span class="issue-icon">🔑</span>
+                    <div class="issue-details">
+                        <span class="issue-title">Forgot Password</span>
+                        <span class="issue-time">~5 min fix</span>
+                    </div>
+                </div>
+                <div class="issue-item" onclick="quickResolve('printer')">
+                    <span class="issue-icon">🖨️</span>
+                    <div class="issue-details">
+                        <span class="issue-title">Printer Offline</span>
+                        <span class="issue-time">~3 min fix</span>
+                    </div>
+                </div>
+                <div class="issue-item" onclick="quickResolve('wifi')">
+                    <span class="issue-icon">🌐</span>
+                    <div class="issue-details">
+                        <span class="issue-title">WiFi Connection</span>
+                        <span class="issue-time">~2 min fix</span>
+                    </div>
+                </div>
+                <div class="issue-item" onclick="quickResolve('email')">
+                    <span class="issue-icon">📧</span>
+                    <div class="issue-details">
+                        <span class="issue-title">Email Not Syncing</span>
+                        <span class="issue-time">~10 min fix</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="input-area">
+        <div class="input-controls">
+            <button class="new-conversation-btn" onclick="startNewConversation()">
+                🗣️ New Conversation
+            </button>
+            <button class="voice-input-btn" onclick="showVoiceNotAvailable()" title="Voice Input">
+                🎤 Voice
+            </button>
+            <button class="export-btn" onclick="exportConversation()" title="Export Conversation">
+                💾 Export
+            </button>
+        </div>
+        <div class="input-container">
+            <textarea class="input-field" id="messageInput" placeholder="Describe your IT issue or ask a question..." rows="1"></textarea>
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                Send
+            </button>
+        </div>
+        <div class="escalation-controls" id="escalationControls" style="display: none;">
+            <button class="escalation-btn" onclick="handleEscalation()">
+                👥 Escalate to Human Agent
+            </button>
+        </div>
+    </div>
+
+    <!-- Enhanced ITSM Settings Modal -->
+    <div class="modal-backdrop" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">⚙️ ITSM Integration Settings</h3>
+                <button class="close-btn" onclick="closeModal('settingsModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <!-- Connection Status Card -->
+                <div class="connection-status-card">
+                    <div class="status-indicator">
+                        <div class="status-dot gray" id="modalStatusDot"></div>
+                        <strong id="modalStatusText">Not Connected</strong>
+                        <button class="btn btn-secondary" style="margin-left: auto; font-size: var(--font-size-xs); padding: var(--space-4) var(--space-8);" onclick="refreshConnection()" id="refreshBtn">
+                            🔄 Refresh
+                        </button>
+                    </div>
+                    <div class="status-details" id="modalStatusDetails">
+                        Last checked: Never
+                    </div>
+                </div>
+                
+                <!-- ServiceNow Branding -->
+                <div class="servicenow-branding" id="serviceNowBranding">
+                    <strong>🌟 ServiceNow Integration</strong><br>
+                    Connected to enterprise-grade IT service management
+                </div>
+                
+                <form id="itsmSettingsForm">
+                    <!-- ITSM Integration Section -->
+                    <div class="settings-section">
+                        <h4><span class="settings-section-icon">🔗</span> ITSM Integration</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="itsmPlatform">ITSM Platform</label>
+                            <select class="form-control" id="itsmPlatform" required onchange="updatePlatformFields()">
+                                <option value="">Select Platform</option>
+                                <option value="servicenow" selected>ServiceNow</option>
+                                <option value="jira">Jira Service Management</option>
+                                <option value="freshservice">Freshservice</option>
+                                <option value="zendesk">Zendesk</option>
+                                <option value="bmc">BMC Helix</option>
+                                <option value="other">Other/Custom</option>
+                            </select>
+                        </div>
+                        
+                        <!-- ServiceNow Specific Fields -->
+                        <div id="serviceNowFields">
+                            <div class="form-group">
+                                <label class="form-label" for="instanceUrl">Instance URL</label>
+                                <input type="url" class="form-control" id="instanceUrl" placeholder="https://yourinstance.service-now.com" required>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="authType">Authentication Type</label>
+                                    <select class="form-control" id="authType" required>
+                                        <option value="oauth2">OAuth 2.0</option>
+                                        <option value="basic">Basic Auth</option>
+                                        <option value="apitoken">API Token</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label" for="timeout">Connection Timeout (sec)</label>
+                                    <input type="number" class="form-control" id="timeout" value="30" min="10" max="300">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="username">Username/Client ID</label>
+                                <input type="text" class="form-control" id="username" placeholder="Enter username or client ID" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="password">Password/Client Secret</label>
+                                <div class="password-field">
+                                    <input type="password" class="form-control" id="password" placeholder="Enter password or client secret" required>
+                                    <button type="button" class="password-toggle" onclick="togglePassword('password')">👁️</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Generic Platform Fields (hidden by default) -->
+                        <div id="genericFields" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label" for="apiEndpoint">API Endpoint URL</label>
+                                <input type="url" class="form-control" id="apiEndpoint" placeholder="https://your-platform-api-endpoint.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label" for="apiKey">API Key/Token</label>
+                                <div class="password-field">
+                                    <input type="password" class="form-control" id="apiKey" placeholder="Enter your API key or token">
+                                    <button type="button" class="password-toggle" onclick="togglePassword('apiKey')">👁️</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Chatbot Preferences Section -->
+                    <div class="settings-section">
+                        <h4><span class="settings-section-icon">🤖</span> Chatbot Preferences</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="autoEscalate" checked> Auto-escalate after 3 failed attempts
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="showTimestamps" checked> Show message timestamps
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="responseDelay">AI Response Delay (ms)</label>
+                            <input type="range" class="form-control" id="responseDelay" min="500" max="3000" value="1500">
+                            <small class="form-help">Simulate realistic AI thinking time</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Notification Settings Section -->
+                    <div class="settings-section">
+                        <h4><span class="settings-section-icon">🔔</span> Notification Settings</h4>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="emailNotifications" checked> Email notifications for ticket updates
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="browserNotifications"> Browser push notifications
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <input type="checkbox" id="soundAlerts"> Sound alerts for new messages
+                            </label>
+                        </div>
+                    </div>
+                </form>
+                
+                <div class="integration-help">
+                    <h4>📚 Need Help?</h4>
+                    <p>Having trouble with the integration? <a href="#" onclick="openHelpModal()">View our setup guide</a> or check the <a href="#" onclick="showDebugMode()">debug console</a>.</p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="testConnection()" id="testConnectionBtn">
+                    🔌 Test Connection
+                </button>
+                <button type="button" class="btn btn-danger" onclick="disconnectITSM()" id="disconnectBtn" style="display: none;">
+                    🔌 Disconnect
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('settingsModal')">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" onclick="saveSettings()" id="saveSettingsBtn">
+                    💾 Save Settings
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ticket Creation Modal -->
+    <div class="modal-backdrop" id="ticketModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Create Support Ticket</h3>
+                <button class="close-btn" onclick="closeModal('ticketModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="ticketForm">
+                    <div class="form-group">
+                        <label class="form-label" for="ticketSummary">Summary/Subject</label>
+                        <input type="text" class="form-control" id="ticketSummary" placeholder="Brief description of the issue" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="ticketDescription">Description</label>
+                        <textarea class="form-control" id="ticketDescription" rows="4" placeholder="Detailed description of the issue..." required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="ticketPriority">Priority</label>
+                            <select class="form-control" id="ticketPriority" required>
+                                <option value="low">Low</option>
+                                <option value="medium" selected>Medium</option>
+                                <option value="high">High</option>
+                                <option value="critical">Critical</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="ticketCategory">Category</label>
+                            <select class="form-control" id="ticketCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="hardware">Hardware</option>
+                                <option value="software">Software</option>
+                                <option value="network">Network</option>
+                                <option value="security">Security</option>
+                                <option value="access">Access/Permissions</option>
+                                <option value="email">Email</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="userName">Your Name</label>
+                            <input type="text" class="form-control" id="userName" placeholder="Full Name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="userEmail">Email Address</label>
+                            <input type="email" class="form-control" id="userEmail" placeholder="your.email@company.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="userPhone">Phone (Optional)</label>
+                            <input type="tel" class="form-control" id="userPhone" placeholder="(555) 123-4567">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="userDepartment">Department</label>
+                            <select class="form-control" id="userDepartment" required>
+                                <option value="">Select Department</option>
+                                <option value="it">IT</option>
+                                <option value="hr">HR</option>
+                                <option value="finance">Finance</option>
+                                <option value="sales">Sales</option>
+                                <option value="marketing">Marketing</option>
+                                <option value="operations">Operations</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="additionalDetails">Additional Details</label>
+                        <textarea class="form-control" id="additionalDetails" rows="3" placeholder="Any additional information that might help..."  ></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('ticketModal')">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary" onclick="submitTicket()" id="submitTicketBtn">
+                    🎫 Submit to ITSM
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ticket Status Modal -->
+    <div class="modal-backdrop" id="statusModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Check Ticket Status</h3>
+                <button class="close-btn" onclick="closeModal('statusModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="statusInputForm">
+                    <div class="form-group">
+                        <label class="form-label" for="ticketNumber">Ticket Number</label>
+                        <input type="text" class="form-control" id="ticketNumber" placeholder="INC0012345 or REQ0067890" required>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="lookupTicket()" id="lookupBtn">
+                        🔍 Look Up Ticket
+                    </button>
+                </div>
+                
+                <div id="ticketDetails" style="display: none;">
+                    <!-- Ticket details will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Enhanced Password Reset Modal -->
+    <div class="modal-backdrop" id="passwordResetModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Password Reset Assistant</h3>
+                <button class="close-btn" onclick="closeModal('passwordResetModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="passwordStep1" class="password-step">
+                    <div class="step-indicator">
+                        <div class="step active">1</div>
+                        <div class="step">2</div>
+                        <div class="step">3</div>
+                    </div>
+                    <h4>Let's identify your account</h4>
+                    <div class="form-group">
+                        <label class="form-label" for="resetUsername">Username or Email</label>
+                        <input type="text" class="form-control" id="resetUsername" placeholder="Enter your username or email address" required>
+                        <small class="form-help">Enter the username or email associated with your account</small>
+                    </div>
+                    <div class="password-options">
+                        <h5>What type of issue are you experiencing?</h5>
+                        <div class="option-grid">
+                            <button class="option-btn" onclick="selectPasswordIssue('forgot')">
+                                <span class="option-icon">🤔</span>
+                                <span class="option-title">Forgot Password</span>
+                                <span class="option-desc">I can't remember my password</span>
+                            </button>
+                            <button class="option-btn" onclick="selectPasswordIssue('locked')">
+                                <span class="option-icon">🔒</span>
+                                <span class="option-title">Account Locked</span>
+                                <span class="option-desc">Too many failed login attempts</span>
+                            </button>
+                            <button class="option-btn" onclick="selectPasswordIssue('expired')">
+                                <span class="option-icon">⏰</span>
+                                <span class="option-title">Password Expired</span>
+                                <span class="option-desc">System says password has expired</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="passwordStep2" class="password-step" style="display: none;">
+                    <div class="step-indicator">
+                        <div class="step completed">✓</div>
+                        <div class="step active">2</div>
+                        <div class="step">3</div>
+                    </div>
+                    <h4>Choose your reset method</h4>
+                    <div class="reset-methods" id="resetMethods">
+                        <!-- Will be populated based on issue type -->
+                    </div>
+                </div>
+                
+                <div id="passwordStep3" class="password-step" style="display: none;">
+                    <div class="step-indicator">
+                        <div class="step completed">✓</div>
+                        <div class="step completed">✓</div>
+                        <div class="step active">3</div>
+                    </div>
+                    <div id="resetContent">
+                        <!-- Dynamic content based on selected method -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Integration Help Modal -->
+    <div class="modal-backdrop" id="helpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Integration Documentation</h3>
+                <button class="close-btn" onclick="closeModal('helpModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <button class="tab active" onclick="showTab('quickstart')">Quick Start</button>
+                    <button class="tab" onclick="showTab('endpoints')">API Endpoints</button>
+                    <button class="tab" onclick="showTab('troubleshooting')">Troubleshooting</button>
+                </div>
+                
+                <div id="quickstart" class="tab-content active">
+                    <div class="help-section">
+                        <h4>Quick Start Guide</h4>
+                        <ol>
+                            <li>Select your ITSM platform from the dropdown</li>
+                            <li>Enter your API endpoint URL</li>
+                            <li>Choose authentication method</li>
+                            <li>Enter your API credentials</li>
+                            <li>Test the connection</li>
+                            <li>Save your configuration</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div id="endpoints" class="tab-content">
+                    <div class="help-section">
+                        <h4>ServiceNow</h4>
+                        <p>Endpoint: <code>https://your-instance.service-now.com/api/now/table/incident</code></p>
+                        <p>Auth: Basic Auth or OAuth 2.0</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>Jira Service Management</h4>
+                        <p>Endpoint: <code>https://your-domain.atlassian.net/rest/servicedeskapi/request</code></p>
+                        <p>Auth: API Token or OAuth 2.0</p>
+                    </div>
+                    <div class="help-section">
+                        <h4>Freshservice</h4>
+                        <p>Endpoint: <code>https://your-domain.freshservice.com/api/v2/tickets</code></p>
+                        <p>Auth: API Key</p>
+                    </div>
+                </div>
+                
+                <div id="troubleshooting" class="tab-content">
+                    <div class="help-section">
+                        <h4>Common Issues</h4>
+                        <ul>
+                            <li><strong>Connection Timeout:</strong> Check firewall settings and API endpoint</li>
+                            <li><strong>Authentication Failed:</strong> Verify API credentials and permissions</li>
+                            <li><strong>Invalid Endpoint:</strong> Ensure URL includes protocol (https://)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('helpModal')">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced IT Knowledge Base with better responses
+        const knowledgeBase = {
+            "password-reset": {
+                keywords: ["password", "login", "locked", "forgot", "reset", "account", "sign in", "authenticate"],
+                response: "🔑 I'll help you reset your password! Let me guide you through our secure reset process.\n\nI can assist with:\n• Forgotten passwords\n• Locked accounts\n• Expired passwords\n• Two-factor authentication issues\n\nClick 'Start Password Reset' to begin the secure 3-step process.",
+                followUp: "What type of password issue are you experiencing?",
+                action: "password-reset"
+            },
+            "software-help": {
+                keywords: ["software", "application", "app", "crash", "install", "update", "program", "freeze"],
+                response: "💻 Let's troubleshoot your software issue:\n\n1. 🔧 Check if you have admin rights\n2. 🔧 Restart the application\n3. 🔧 Check system requirements\n4. 🔧 Verify antivirus isn't blocking\n5. 🔧 Try running in compatibility mode\n\nWhich application is giving you trouble?",
+                followUp: "What error message are you seeing, if any?"
+            },
+            "printer-issue": {
+                keywords: ["printer", "print", "queue", "paper", "toner", "cartridge", "offline"],
+                response: "🖨️ Let's fix your printer issue:\n\n1. 🖥️ Check power and USB/network connections\n2. 🖥️ Verify printer is set as default\n3. 🖥️ Clear print queue and restart spooler\n4. 🖥️ Check paper and toner levels\n5. 🖥️ Update printer drivers\n\nWhat specific printer problem are you experiencing?",
+                followUp: "Is your printer showing offline or any error lights?"
+            },
+            "network-issue": {
+                keywords: ["wifi", "internet", "network", "connection", "vpn", "slow", "connectivity"],
+                response: "🌐 Network troubleshooting guide:\n\n1. 📶 Toggle WiFi off and on\n2. 📶 Forget and reconnect to network\n3. 📶 Restart your device\n4. 📶 Check with other devices\n5. 📶 Contact network administrator\n\nAre you having trouble with WiFi or wired connection?",
+                followUp: "Can you access some websites but not others?"
+            },
+            "email-problem": {
+                keywords: ["email", "outlook", "mail", "attachment", "send", "receive", "inbox"],
+                response: "📧 Email troubleshooting steps:\n\n1. 📧 Check internet connection\n2. 📧 Restart email application\n3. 📧 Verify email settings\n4. 📧 Clear email cache\n5. 📧 Check spam/junk folder\n\nWhat specific email problem are you experiencing?",
+                followUp: "Are you unable to send, receive, or both?"
+            },
+            "check-ticket": {
+                keywords: ["status", "ticket", "check", "update", "progress"],
+                response: "🎫 I can help you check your ticket status! You can:\n\n1. 📋 Enter your ticket number (INC/REQ/CHG format)\n2. 📋 View recent tickets from your account\n3. 📋 Get real-time status updates\n\nPlease provide your ticket number or let me open the status checker.",
+                followUp: "Do you have your ticket number ready?",
+                action: "check-ticket"
+            },
+            performance_issues: {
+                keywords: ["slow", "freeze", "hang", "performance", "cpu", "memory", "lag"],
+                response: "Performance troubleshooting:\n\n1. ⚡ Open Task Manager (Ctrl+Shift+Esc)\n2. ⚡ Close unnecessary programs\n3. ⚡ Check for Windows updates\n4. ⚡ Run disk cleanup\n5. ⚡ Scan for malware\n\nHow long has your computer been running slowly?",
+                followUp: "Is it slow all the time or only when running specific programs?"
+            },
+            security_concerns: {
+                keywords: ["virus", "malware", "phishing", "security", "suspicious", "spam", "hack"],
+                response: "Security issue detected! Here's what to do:\n\n1. 🛡️ Don't click suspicious links\n2. 🛡️ Run full antivirus scan\n3. 🛡️ Change passwords if compromised\n4. 🛡️ Report to IT security team\n5. 🛡️ Disconnect from network if infected\n\nWhat type of security concern are you experiencing?",
+                followUp: "Did you click on any suspicious links or download unknown files?"
+            }
+        };
+
+        // Application state
+        let conversationHistory = [];
+        let itsmConfig = {
+            platform: 'servicenow',
+            instanceUrl: '',
+            authType: 'oauth2',
+            username: '',
+            password: '',
+            timeout: 30,
+            connected: false,
+            lastChecked: null
+        };
+        let ticketCounter = {
+            incident: 12345,
+            request: 67890,
+            change: 11111
+        };
+        let lastResponseType = null;
+        let awaitingEscalation = false;
+        let messageExchangeCount = 0;
+        let currentPasswordIssue = null;
+        let selectedPasswordMethod = null;
+        let conversationRating = null;
+        let feedbackGiven = new Set();
+        let recentConversations = [
+            { title: 'Password Reset Issue', time: '2 hours ago', id: 'conv1' },
+            { title: 'Printer Configuration', time: 'Yesterday', id: 'conv2' },
+            { title: 'VPN Connection Problem', time: '2 days ago', id: 'conv3' }
+        ];
+        let currentTheme = 'auto';
+        let statsData = {
+            ticketsToday: 3,
+            avgResolution: '2.4h',
+            lastSync: new Date()
+        };
+        let debugMode = false;
+        let debugLog = [];
+        let userPreferences = {
+            autoEscalate: true,
+            showTimestamps: true,
+            responseDelay: 1500,
+            emailNotifications: true,
+            browserNotifications: false,
+            soundAlerts: false
+        };
+
+        // DOM elements
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+
+        // Enhanced ITSM API Simulation
+        const itsmAPI = {
+            testConnection: async (config) => {
+                return new Promise((resolve) => {
+                    logDebug('Testing connection to ITSM platform...', config);
+                    
+                    setTimeout(() => {
+                        let success = false;
+                        let message = '';
+                        
+                        if (config.platform === 'servicenow') {
+                            success = config.instanceUrl && config.username && config.password && config.authType;
+                            if (success) {
+                                const instanceName = config.instanceUrl.match(/https?:\/\/([^.]+)/)?.[1] || 'instance';
+                                message = `✓ Successfully connected to ServiceNow instance: ${instanceName}.service-now.com`;
+                                logDebug('ServiceNow connection successful', { instance: instanceName });
+                            } else {
+                                message = '❌ Connection failed. Please check your ServiceNow credentials and instance URL.';
+                                logDebug('ServiceNow connection failed - missing required fields');
+                            }
+                        } else {
+                            success = config.endpoint && config.apiKey && config.authType;
+                            message = success ? 'Connection successful!' : 'Connection failed. Please check your settings.';
+                        }
+                        
+                        resolve({
+                            success: success,
+                            message: message,
+                            responseTime: Math.floor(Math.random() * 500) + 200,
+                            platform: config.platform
+                        });
+        
+
+                    }, 2000); // 2-second realistic delay
+                });
+            },
+            
+            createTicket: async (ticketData) => {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const isIncident = ['hardware', 'network', 'security'].includes(ticketData.category);
+                        const prefix = isIncident ? 'INC' : 'REQ';
+                        const counter = isIncident ? ticketCounter.incident++ : ticketCounter.request++;
+                        const ticketId = `${prefix}${counter.toString().padStart(7, '0')}`;
+                        
+                        const estimatedResolution = {
+                            'low': '2-3 business days',
+                            'medium': '1-2 business days',
+                            'high': '4-8 hours',
+                            'critical': '1-2 hours'
+                        };
+                        
+                        resolve({
+                            success: true,
+                            ticketId: ticketId,
+                            estimatedResolution: estimatedResolution[ticketData.priority],
+                            assignedAgent: getRandomAgent(),
+                            trackingUrl: `https://helpdesk.company.com/ticket/${ticketId}`,
+                            nextSteps: 'You will receive email updates on ticket progress. For urgent issues, you may also call the IT help desk.'
+                        });
+                    }, 2000);
+                });
+            },
+            
+            getTicketStatus: async (ticketId) => {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        const mockTickets = {
+                            'INC0012345': {
+                                id: 'INC0012345',
+                                status: 'In Progress',
+                                priority: 'High',
+                                category: 'Network',
+                                created: '2025-10-23T09:15:00Z',
+                                updated: '2025-10-23T14:30:00Z',
+                                assignee: 'John Smith',
+                                assigneeEmail: 'john.smith@company.com',
+                                description: 'VPN connection issues affecting remote access',
+                                timeline: [
+                                    { time: '2025-10-23T09:15:00Z', action: 'Ticket created' },
+                                    { time: '2025-10-23T10:30:00Z', action: 'Assigned to John Smith' },
+                                    { time: '2025-10-23T14:30:00Z', action: 'Investigating VPN server logs' }
+                                ]
+                            },
+                            'REQ0067890': {
+                                id: 'REQ0067890',
+                                status: 'Resolved',
+                                priority: 'Medium',
+                                category: 'Software',
+                                created: '2025-10-22T11:20:00Z',
+                                updated: '2025-10-23T08:45:00Z',
+                                assignee: 'Sarah Johnson',
+                                assigneeEmail: 'sarah.johnson@company.com',
+                                description: 'Microsoft Office installation request',
+                                timeline: [
+                                    { time: '2025-10-22T11:20:00Z', action: 'Request submitted' },
+                                    { time: '2025-10-22T13:45:00Z', action: 'Approved by department manager' },
+                                    { time: '2025-10-23T08:45:00Z', action: 'Software installed and configured' }
+                                ],
+                                resolved: true,
+                                satisfactionRating: true
+                            }
+                        };
+                        
+                        const ticket = mockTickets[ticketId.toUpperCase()] || generateRandomTicket(ticketId);
+                        resolve({
+                            success: true,
+                            ticket: ticket
+                        });
+                    }, 1200);
+                });
+            }
+        };
+        
+        // Helper functions
+        function getRandomAgent() {
+            const agents = [
+                { name: 'John Smith', email: 'john.smith@company.com' },
+                { name: 'Sarah Johnson', email: 'sarah.johnson@company.com' },
+                { name: 'Mike Chen', email: 'mike.chen@company.com' },
+                { name: 'Lisa Williams', email: 'lisa.williams@company.com' }
+            ];
+            return agents[Math.floor(Math.random() * agents.length)];
+        }
+        
+        // Debug functions
+        function logDebug(message, data = null) {
+            if (debugMode) {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = `[${timestamp}] ${message}${data ? ' - ' + JSON.stringify(data) : ''}`;
+                debugLog.push(logEntry);
+                updateDebugConsole();
+                console.log('🔧 Debug:', message, data);
+            }
+        }
+        
+        function updateDebugConsole() {
+            const console = document.getElementById('debugConsole');
+            if (console) {
+                const logElement = console.querySelector('.debug-log');
+                logElement.textContent = debugLog.slice(-50).join('\n');
+                logElement.scrollTop = logElement.scrollHeight;
+            }
+        }
+        
+        function showDebugMode() {
+            debugMode = !debugMode;
+            const console = document.getElementById('debugConsole');
+            if (debugMode && !console) {
+                createDebugConsole();
+            } else if (console) {
+                console.classList.toggle('active');
+            }
+            logDebug('Debug mode toggled', { enabled: debugMode });
+        }
+        
+        function createDebugConsole() {
+            const consoleDiv = document.createElement('div');
+            consoleDiv.id = 'debugConsole';
+            consoleDiv.className = 'debug-console active';
+            consoleDiv.innerHTML = `
+                <div class="debug-header">
+                    <strong>🔧 Debug Console</strong>
+                    <button onclick="clearDebugLog()" style="background: none; border: none; color: #fff; cursor: pointer;">Clear</button>
+                </div>
+                <div class="debug-log"></div>
+            `;
+            document.body.appendChild(consoleDiv);
+            updateDebugConsole();
+        }
+        
+        function clearDebugLog() {
+            debugLog = [];
+            updateDebugConsole();
+        }
+        
+        // Toast notification system
+        function showToast(type, title, message, duration = 5000) {
+            const toastContainer = getOrCreateToastContainer();
+            
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const iconMap = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            toast.innerHTML = `
+                <div class="toast-icon">${iconMap[type]}</div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="dismissToast(this)">&times;</button>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            // Auto-dismiss
+            setTimeout(() => {
+                dismissToast(toast.querySelector('.toast-close'));
+            }, duration);
+            
+            logDebug('Toast shown', { type, title, message });
+        }
+        
+        function getOrCreateToastContainer() {
+            let container = document.getElementById('toastContainer');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toastContainer';
+                container.className = 'toast-container';
+                document.body.appendChild(container);
+            }
+            return container;
+        }
+        
+        function dismissToast(closeBtn) {
+            const toast = closeBtn.closest('.toast');
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        }
+        
+        function generateRandomTicket(ticketId) {
+            const statuses = ['Open', 'In Progress', 'Pending', 'Resolved'];
+            const priorities = ['Low', 'Medium', 'High'];
+            const categories = ['Hardware', 'Software', 'Network', 'Email'];
+            
+            return {
+                id: ticketId.toUpperCase(),
+                status: statuses[Math.floor(Math.random() * statuses.length)],
+                priority: priorities[Math.floor(Math.random() * priorities.length)],
+                category: categories[Math.floor(Math.random() * categories.length)],
+                created: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(),
+                updated: new Date(Date.now() - Math.random() * 24 * 60 * 60 * 1000).toISOString(),
+                assignee: getRandomAgent().name,
+                assigneeEmail: getRandomAgent().email,
+                description: 'General IT support request',
+                timeline: [
+                    { time: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString(), action: 'Ticket created' },
+                    { time: new Date(Date.now() - Math.random() * 5 * 24 * 60 * 60 * 1000).toISOString(), action: 'Assigned to technician' }
+                ]
+            };
+        }
+        
+        // Initialize chat
+        function initChat() {
+            addMessage('ai', '👋 Hello! I\'m your IT Helpdesk AI Assistant with enhanced ServiceNow integration. I\'m here to help you troubleshoot common technical issues and create support tickets when needed.\n\nClick on a quick action below or describe your issue in your own words. I can also help you check the status of existing tickets!');
+            loadSettings();
+            initializeTheme();
+            updateStats();
+            updatePlatformFields();
+            setupQuickActionHandlers();
+            logDebug('Application initialized', { 
+                theme: currentTheme, 
+                connected: itsmConfig.connected,
+                platform: itsmConfig.platform 
+            });
+        }
+        
+        // Enhanced Quick Actions System with centralized event delegation
+        function setupQuickActionHandlers() {
+            // Centralized event delegation for all quick action buttons
+            document.addEventListener('click', function(e) {
+                const actionBtn = e.target.closest('[data-action]');
+                if (actionBtn) {
+                    e.preventDefault();
+                    const actionType = actionBtn.getAttribute('data-action');
+                    handleQuickAction(actionType);
+                }
+            });
+            
+            logDebug('Quick action handlers initialized');
+        }
+        
+        // Theme Management
+        function initializeTheme() {
+            const themeToggle = document.getElementById('themeToggle');
+            const savedTheme = currentTheme;
+            
+            applyTheme(savedTheme);
+            
+            themeToggle.addEventListener('click', toggleTheme);
+        }
+        
+        function toggleTheme() {
+            const themes = ['light', 'dark', 'auto'];
+            const currentIndex = themes.indexOf(currentTheme);
+            const nextIndex = (currentIndex + 1) % themes.length;
+            currentTheme = themes[nextIndex];
+            
+            applyTheme(currentTheme);
+            updateThemeIcon();
+        }
+        
+        function applyTheme(theme) {
+            const body = document.body;
+            
+            // Remove existing theme classes
+            body.removeAttribute('data-color-scheme');
+            
+            if (theme === 'dark') {
+                body.setAttribute('data-color-scheme', 'dark');
+            } else if (theme === 'light') {
+                body.setAttribute('data-color-scheme', 'light');
+            }
+            // 'auto' uses system preference (no data attribute needed)
+            
+            updateThemeIcon();
+        }
+        
+        function updateThemeIcon() {
+            const themeToggle = document.getElementById('themeToggle');
+            const icons = {
+                'light': '🌞',
+                'dark': '🌙',
+                'auto': '🌌'
+            };
+            themeToggle.textContent = icons[currentTheme];
+        }
+        
+        // Stats Management
+        function updateStats() {
+            if (itsmConfig.connected) {
+                document.getElementById('headerStats').style.display = 'flex';
+                document.getElementById('ticketsToday').textContent = statsData.ticketsToday;
+                document.getElementById('avgResolution').textContent = statsData.avgResolution;
+                
+                const timeDiff = (new Date() - statsData.lastSync) / (1000 * 60); // minutes
+                const syncText = timeDiff < 1 ? 'Just now' : `${Math.floor(timeDiff)}m ago`;
+                document.getElementById('connectionDetails').textContent = `Last sync: ${syncText}`;
+                document.getElementById('connectionDetails').style.display = 'inline';
+            } else {
+                document.getElementById('headerStats').style.display = 'none';
+                document.getElementById('connectionDetails').style.display = 'none';
+            }
+        }
+        
+        // Enhanced Password Reset Flow with validation
+        function startPasswordReset() {
+            openModal('passwordResetModal');
+            resetPasswordFlow();
+            logDebug('Password reset modal opened');
+        }
+        
+        function resetPasswordFlow() {
+            // Reset all steps
+            document.getElementById('passwordStep1').style.display = 'block';
+            document.getElementById('passwordStep2').style.display = 'none';
+            document.getElementById('passwordStep3').style.display = 'none';
+            
+            // Clear form
+            document.getElementById('resetUsername').value = '';
+            currentPasswordIssue = null;
+            selectedPasswordMethod = null;
+            
+            // Update progress indicators
+            updatePasswordStepIndicators(1);
+        }
+        
+        function updatePasswordStepIndicators(currentStep) {
+            const steps = document.querySelectorAll('#passwordResetModal .step');
+            steps.forEach((step, index) => {
+                const stepNumber = index + 1;
+                step.className = 'step';
+                if (stepNumber < currentStep) {
+                    step.className += ' completed';
+                    step.textContent = '✓';
+                } else if (stepNumber === currentStep) {
+                    step.className += ' active';
+                    step.textContent = stepNumber;
+                } else {
+                    step.textContent = stepNumber;
+                }
+            });
+        }
+        
+        function validateUsernameInput(username) {
+            if (!username || username.trim().length === 0) {
+                return { valid: false, message: 'Please enter your username or email address.' };
+            }
+            
+            // Basic email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isEmail = emailRegex.test(username);
+            
+            // Username validation (alphanumeric, dots, underscores)
+            const usernameRegex = /^[a-zA-Z0-9._]+$/;
+            const isUsername = usernameRegex.test(username);
+            
+            if (!isEmail && !isUsername) {
+                return { valid: false, message: 'Please enter a valid email address or username.' };
+            }
+            
+            return { valid: true, message: '' };
+        }
+        
+        function selectPasswordIssue(issueType) {
+            const username = document.getElementById('resetUsername').value.trim();
+            const validation = validateUsernameInput(username);
+            
+            if (!validation.valid) {
+                showToast('error', 'Validation Error', validation.message);
+                document.getElementById('resetUsername').focus();
+                return;
+            }
+            
+            currentPasswordIssue = issueType;
+            
+            // Move to step 2
+            document.getElementById('passwordStep1').style.display = 'none';
+            document.getElementById('passwordStep2').style.display = 'block';
+            updatePasswordStepIndicators(2);
+            
+            // Populate reset methods based on issue type
+            populateResetMethods(issueType);
+            
+            logDebug('Password issue selected', { issueType, username });
+        }
+        
+        function populateResetMethods(issueType) {
+            const resetMethods = document.getElementById('resetMethods');
+            
+            let methodsHtml = '';
+            
+            if (issueType === 'forgot') {
+                methodsHtml = `
+                    <div class="method-card" onclick="selectResetMethod('selfservice')">
+                        <div class="method-header">
+                            <span class="method-icon">🌐</span>
+                            <div class="method-info">
+                                <div class="method-title">Self-Service Portal</div>
+                                <div class="method-time">2-3 minutes</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Reset via company portal (recommended)
+                        </div>
+                    </div>
+                    
+                    <div class="method-card" onclick="selectResetMethod('email')">
+                        <div class="method-header">
+                            <span class="method-icon">📧</span>
+                            <div class="method-info">
+                                <div class="method-title">Email Reset Link</div>
+                                <div class="method-time">5-10 minutes</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Receive reset link via email
+                        </div>
+                    </div>
+                    
+                    <div class="method-card" onclick="selectResetMethod('security')">
+                        <div class="method-header">
+                            <span class="method-icon">🔐</span>
+                            <div class="method-info">
+                                <div class="method-title">Security Questions</div>
+                                <div class="method-time">3-5 minutes</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Answer security questions
+                        </div>
+                    </div>
+                    
+                    <div class="method-card" onclick="selectResetMethod('itsupport')">
+                        <div class="method-header">
+                            <span class="method-icon">🎫</span>
+                            <div class="method-info">
+                                <div class="method-title">Contact IT Support</div>
+                                <div class="method-time">1-2 hours</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Create support ticket
+                        </div>
+                    </div>
+                `;
+            } else if (issueType === 'locked') {
+                methodsHtml = `
+                    <div class="method-card" onclick="selectResetMethod('unlock')">
+                        <div class="method-header">
+                            <span class="method-icon">🔓</span>
+                            <div class="method-info">
+                                <div class="method-title">Account Unlock</div>
+                                <div class="method-time">~2 minutes</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Automatically unlock your account using verification
+                        </div>
+                    </div>
+                    
+                    <div class="method-card" onclick="selectResetMethod('itsupport')">
+                        <div class="method-header">
+                            <span class="method-icon">🎫</span>
+                            <div class="method-info">
+                                <div class="method-title">Contact IT Support</div>
+                                <div class="method-time">1-2 hours</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Create support ticket for immediate unlock
+                        </div>
+                    </div>
+                `;
+            } else if (issueType === 'expired') {
+                methodsHtml = `
+                    <div class="method-card" onclick="selectResetMethod('change')">
+                        <div class="method-header">
+                            <span class="method-icon">🔄</span>
+                            <div class="method-info">
+                                <div class="method-title">Change Password</div>
+                                <div class="method-time">~3 minutes</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Update password to meet current requirements
+                        </div>
+                    </div>
+                    
+                    <div class="method-card" onclick="selectResetMethod('temporary')">
+                        <div class="method-header">
+                            <span class="method-icon">⏳</span>
+                            <div class="method-info">
+                                <div class="method-title">Temporary Password</div>
+                                <div class="method-time">~5 minutes</div>
+                            </div>
+                        </div>
+                        <div class="method-desc">
+                            Get a temporary password to access your account
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resetMethods.innerHTML = methodsHtml;
+        }
+        
+        function selectResetMethod(method) {
+            selectedPasswordMethod = method;
+            
+            // Move to step 3
+            document.getElementById('passwordStep2').style.display = 'none';
+            document.getElementById('passwordStep3').style.display = 'block';
+            updatePasswordStepIndicators(3);
+            
+            // Show method-specific content
+            showResetMethodContent(method);
+            
+            logDebug('Password reset method selected', { method, issue: currentPasswordIssue });
+        }
+        
+        function showResetMethodContent(method) {
+            const resetContent = document.getElementById('resetContent');
+            const username = document.getElementById('resetUsername').value;
+            
+            let contentHtml = '';
+            
+            switch (method) {
+                case 'selfservice':
+                    contentHtml = `
+                        <div class="success-message">
+                            <div class="success-icon">🌐</div>
+                            <h4>Self-Service Portal</h4>
+                            <p>Complete your password reset using our secure self-service portal.</p>
+                            
+                            <div class="next-steps">
+                                <h5>Instructions:</h5>
+                                <ol class="step-list">
+                                    <li>Go to portal.company.com</li>
+                                    <li>Click 'Forgot Password'</li>
+                                    <li>Enter your username</li>
+                                    <li>Check your email for reset link</li>
+                                </ol>
+                            </div>
+                            
+                            <div style="margin-top: var(--space-16);">
+                                <button class="btn btn-primary" onclick="simulatePortalRedirect()">Open Self-Service Portal</button>
+                                <button class="btn btn-secondary" onclick="goBackStep()" style="margin-left: var(--space-8);">Back</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'email':
+                    contentHtml = `
+                        <div class="success-message">
+                            <div class="success-icon">📧</div>
+                            <h4>Email Reset Link Sent</h4>
+                            <p>Password reset email sent to your registered email address.</p>
+                            
+                            <div class="next-steps">
+                                <h5>Next Steps:</h5>
+                                <ul class="step-list">
+                                    <li>Check your inbox and spam folder</li>
+                                    <li>Click the reset link (valid for 24 hours)</li>
+                                    <li>Create your new password</li>
+                                    <li>Log in with new credentials</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="margin-top: var(--space-16);">
+                                <button class="btn btn-primary" onclick="closeModal('passwordResetModal')">Done</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'security':
+                    contentHtml = `
+                        <h4>Security Questions Verification</h4>
+                        <p>Please answer your security questions for account: <strong>${username}</strong></p>
+                        
+                        <div class="security-questions">
+                            <div class="question-group">
+                                <label class="form-label">What was the name of your first pet?</label>
+                                <input type="text" class="form-control" id="securityQ1" placeholder="Enter your answer" required>
+                            </div>
+                            
+                            <div class="question-group">
+                                <label class="form-label">In what city were you born?</label>
+                                <input type="text" class="form-control" id="securityQ2" placeholder="Enter your answer" required>
+                            </div>
+                            
+                            <div class="question-group">
+                                <label class="form-label">What was your first car model?</label>
+                                <input type="text" class="form-control" id="securityQ3" placeholder="Enter your answer" required>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: var(--space-20); text-align: center;">
+                            <button class="btn btn-secondary" onclick="goBackStep()">Back</button>
+                            <button class="btn btn-primary" onclick="verifySecurityQuestions()">Verify Answers</button>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'itsupport':
+                    // Auto-create ticket with priority details
+                    const ticketId = `INC${(Math.floor(Math.random() * 9000000) + 1000000)}`;
+                    contentHtml = `
+                        <div class="success-message">
+                            <div class="success-icon">🎫</div>
+                            <h4>Support Ticket Created</h4>
+                            <p><strong>Ticket ID:</strong> ${ticketId}</p>
+                            <p><strong>Category:</strong> Access / Password Reset</p>
+                            <p><strong>Priority:</strong> High</p>
+                            
+                            <div class="next-steps">
+                                <h5>What happens next:</h5>
+                                <ul class="step-list">
+                                    <li>IT support will contact you within 1-2 hours</li>
+                                    <li>Identity verification via phone/email</li>
+                                    <li>Password reset or temporary access provided</li>
+                                    <li>Email confirmation when resolved</li>
+                                </ul>
+                                
+                                <div style="background: var(--color-bg-1); padding: var(--space-12); border-radius: var(--radius-base); margin-top: var(--space-16);">
+                                    <strong>Response Times by Priority:</strong><br>
+                                    <small>
+                                        • High: 1-2 hours<br>
+                                        • Medium: 1-2 business days<br>
+                                        • Low: 3-5 business days
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: var(--space-16);">
+                                <button class="btn btn-primary" onclick="completePasswordReset('${ticketId}')">Done</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'unlock':
+                    contentHtml = `
+                        <div class="success-message">
+                            <div class="success-icon">🔓</div>
+                            <h4>Account Unlock in Progress</h4>
+                            <p>Unlocking account: <strong>${username}</strong></p>
+                            
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="unlockProgress" style="width: 0%;"></div>
+                            </div>
+                            
+                            <div id="unlockStatus">Verifying account status...</div>
+                        </div>
+                    `;
+                    
+                    // Simulate unlock process
+                    setTimeout(() => {
+                        simulateUnlockProcess();
+                    }, 1000);
+                    break;
+                    
+                case 'change':
+                    contentHtml = `
+                        <div class="success-message">
+                            <div class="success-icon">🔄</div>
+                            <h4>Password Change Required</h4>
+                            <p>Your password has expired and needs to be updated.</p>
+                            
+                            <div class="next-steps">
+                                <h5>Instructions:</h5>
+                                <ol class="step-list">
+                                    <li>Use your current password to log in</li>
+                                    <li>System will prompt for password change</li>
+                                    <li>Create a strong new password</li>
+                                    <li>Confirm the new password</li>
+                                </ol>
+                                
+                                <div style="background: var(--color-bg-3); padding: var(--space-12); border-radius: var(--radius-base); margin-top: var(--space-16);">
+                                    <strong>Password Requirements:</strong><br>
+                                    <small>
+                                        • At least 8 characters<br>
+                                        • Mix of letters, numbers & symbols<br>
+                                        • Cannot reuse last 5 passwords
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: var(--space-16);">
+                                <button class="btn btn-primary" onclick="closeModal('passwordResetModal')">Understood</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'temporary':
+                    const tempPassword = generateTempPassword();
+                    contentHtml = `
+                        <div class="success-message">
+                            <div class="success-icon">⏳</div>
+                            <h4>Temporary Password Generated</h4>
+                            <p>Use this temporary password to access your account:</p>
+                            
+                            <div style="background: var(--color-bg-2); padding: var(--space-16); border-radius: var(--radius-base); margin: var(--space-16) 0; text-align: center;">
+                                <strong style="font-family: var(--font-family-mono); font-size: var(--font-size-lg);">${tempPassword}</strong>
+                            </div>
+                            
+                            <div class="next-steps">
+                                <h5>Important:</h5>
+                                <ul class="step-list">
+                                    <li>This password expires in 24 hours</li>
+                                    <li>You must change it on first login</li>
+                                    <li>Do not share this password</li>
+                                    <li>Contact IT if you have issues</li>
+                                </ul>
+                            </div>
+                            
+                            <div style="margin-top: var(--space-16);">
+                                <button class="btn btn-primary" onclick="closeModal('passwordResetModal')">Got It</button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    contentHtml = `
+                        <div class="success-message">
+                            <div class="success-icon">✅</div>
+                            <h4>Password Reset Complete</h4>
+                            <p>Your password reset request has been processed successfully.</p>
+                            <button class="btn btn-primary" onclick="closeModal('passwordResetModal')">Done</button>
+                        </div>
+                    `;
+            }
+            
+            resetContent.innerHTML = contentHtml;
+        }
+        
+        function generateTempPassword() {
+            const chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$';
+            let password = '';
+            for (let i = 0; i < 12; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+        
+        function completePasswordReset(ticketId) {
+            addMessage('ai', `✅ Password reset support ticket created successfully!\n\nTicket ID: ${ticketId}\nPriority: High\nEstimated resolution: 1-2 hours\n\nYou will receive an email confirmation and status updates. Our IT support team will contact you shortly to verify your identity and assist with the password reset.`);
+            closeModal('passwordResetModal');
+        }
+        
+        function goBackStep() {
+            document.getElementById('passwordStep3').style.display = 'none';
+            document.getElementById('passwordStep2').style.display = 'block';
+            updatePasswordStepIndicators(2);
+        }
+        
+        function goBackToStep1() {
+            document.getElementById('passwordStep2').style.display = 'none';
+            document.getElementById('passwordStep1').style.display = 'block';
+            updatePasswordStepIndicators(1);
+        }
+        
+        function simulatePortalRedirect() {
+            addMessage('ai', '🌐 Self-service portal instructions sent! Here\'s what to do:\n\n1. Go to: portal.company.com\n2. Click "Forgot Password"\n3. Enter your username\n4. Check your email for the reset link\n\nIf you don\'t receive an email within 5 minutes, check your spam folder or try another reset method.');
+            closeModal('passwordResetModal');
+            
+            // Add follow-up action
+            setTimeout(() => {
+                addActionButton('Need Help with Portal?', () => {
+                    addMessage('ai', 'I can help you with the portal! Common issues:\n\n• Clear browser cache and cookies\n• Try incognito/private browsing mode\n• Disable browser extensions temporarily\n• Use a different browser\n\nStill having trouble? I can create a support ticket for you.');
+                });
+            }, 2000);
+        }
+        
+        function verifySecurityQuestions() {
+            const q1 = document.getElementById('securityQ1').value.trim();
+            const q2 = document.getElementById('securityQ2').value.trim();
+            const q3 = document.getElementById('securityQ3').value.trim();
+            
+            if (!q1 || !q2 || !q3) {
+                showToast('error', 'Validation Error', 'Please answer all security questions.');
+                return;
+            }
+            
+            // Simulate verification process
+            const verifyBtn = event.target;
+            verifyBtn.disabled = true;
+            verifyBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+            
+            setTimeout(() => {
+                const resetContent = document.getElementById('resetContent');
+                resetContent.innerHTML = `
+                    <div class="success-message">
+                        <div class="success-icon">✅</div>
+                        <h4>Security Questions Verified!</h4>
+                        <p>Your identity has been successfully verified.</p>
+                        
+                        <div class="next-steps">
+                            <h5>Password Reset Completed:</h5>
+                            <ul class="step-list">
+                                <li>Email with reset link sent to your account</li>
+                                <li>Link is valid for 2 hours</li>
+                                <li>Create a strong new password</li>
+                                <li>Log in with your new credentials</li>
+                            </ul>
+                            
+                            <div style="background: var(--color-bg-3); padding: var(--space-12); border-radius: var(--radius-base); margin-top: var(--space-16);">
+                                <strong>📝 Password Tips:</strong><br>
+                                <small>
+                                    Use a mix of uppercase, lowercase, numbers & symbols.<br>
+                                    Avoid personal information and common words.
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: var(--space-16);">
+                            <button class="btn btn-primary" onclick="closeModal('passwordResetModal')">Complete</button>
+                        </div>
+                    </div>
+                `;
+                
+                addMessage('ai', '✅ Security verification successful! \n\nYour password reset request has been approved and instructions have been sent to your registered email address. The reset link will be valid for 2 hours.\n\nPlease check your inbox and spam folder.');
+                
+                logDebug('Security questions verified', { username: document.getElementById('resetUsername').value });
+            }, 2000);
+        }
+        
+        function createPasswordTicket() {
+            // Pre-fill ticket form
+            document.getElementById('ticketSummary').value = 'Urgent: Password Reset Request';
+            document.getElementById('ticketDescription').value = `Priority password reset request for user: ${document.getElementById('resetUsername').value}\n\nIssue type: ${currentPasswordIssue}\nRequested via: AI Assistant\nUrgency: High - User unable to access account`;
+            document.getElementById('ticketPriority').value = 'high';
+            document.getElementById('ticketCategory').value = 'security';
+            
+            closeModal('passwordResetModal');
+            openModal('ticketModal');
+            
+            addMessage('ai', '🎫 I\'ve prepared a priority support ticket for your password reset. Please review the details and submit the ticket.');
+        }
+        
+        function simulateUnlockProcess() {
+            const progressBar = document.getElementById('unlockProgress');
+            const statusText = document.getElementById('unlockStatus');
+            
+            let progress = 0;
+            const steps = [
+                'Checking account status...',
+                'Verifying user identity...',
+                'Removing account locks...',
+                'Updating security logs...',
+                'Account unlocked successfully!'
+            ];
+            
+            const interval = setInterval(() => {
+                progress += 25;
+                progressBar.style.width = progress + '%';
+                
+                if (progress <= 100) {
+                    statusText.textContent = steps[Math.floor(progress / 25)];
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        const resetContent = document.getElementById('resetContent');
+                        resetContent.innerHTML = `
+                            <div class="success-message">
+                                <div class="success-icon">✅</div>
+                                <h4>Account Successfully Unlocked!</h4>
+                                <p>Your account has been unlocked and is ready for use.</p>
+                                
+                                <div class="next-steps">
+                                    <h5>You can now:</h5>
+                                    <ul class="step-list">
+                                        <li>Log in with your existing password</li>
+                                        <li>Access all your applications normally</li>
+                                        <li>Remember to avoid rapid login attempts</li>
+                                    </ul>
+                                </div>
+                                
+                                <button class="btn btn-primary" onclick="closeModal('passwordResetModal')">Done</button>
+                            </div>
+                        `;
+                        
+                        addMessage('ai', '✅ Great news! Your account has been successfully unlocked. You can now log in with your existing password.');
+                    }, 1000);
+                }
+            }, 800);
+        }
+
+        // Enhanced message system with better formatting and accessibility
+        function addMessage(type, content, showTime = true, options = {}) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.setAttribute('role', 'log');
+            messageDiv.setAttribute('aria-live', 'polite');
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.textContent = type === 'ai' ? '🤖' : '👤';
+            avatarDiv.setAttribute('aria-label', type === 'ai' ? 'AI Assistant' : 'User');
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            // Support multi-line messages with proper formatting
+            if (content.includes('\n')) {
+                const lines = content.split('\n');
+                lines.forEach((line, index) => {
+                    if (line.trim()) {
+                        const lineDiv = document.createElement('div');
+                        lineDiv.textContent = line;
+                        contentDiv.appendChild(lineDiv);
+                    } else if (index < lines.length - 1) {
+                        contentDiv.appendChild(document.createElement('br'));
+                    }
+                });
+            } else {
+                contentDiv.textContent = content;
+            }
+            
+            messageDiv.appendChild(avatarDiv);
+            messageDiv.appendChild(contentDiv);
+            
+            // Add timestamp if enabled
+            if (showTime && userPreferences.showTimestamps) {
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                timeDiv.setAttribute('aria-label', `Message sent at ${timeDiv.textContent}`);
+                messageDiv.appendChild(timeDiv);
+            }
+            
+            // Add feedback buttons for AI messages
+            if (type === 'ai' && !options.noFeedback) {
+                addMessageFeedback(messageDiv);
+            }
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+            
+            // Store in conversation history
+            conversationHistory.push({
+                type: type,
+                content: content,
+                timestamp: new Date(),
+                id: Date.now() + Math.random()
+            });
+            
+            // Accessibility announcement
+            if (type === 'ai') {
+                announceToScreenReader(`AI Assistant says: ${content.substring(0, 100)}${content.length > 100 ? '...' : ''}`);
+            }
+            
+            logDebug('Message added', { type, contentLength: content.length });
+        }
+        
+        function addMessageFeedback(messageDiv) {
+            const feedbackDiv = document.createElement('div');
+            feedbackDiv.className = 'message-feedback';
+            feedbackDiv.innerHTML = `
+                <button class="feedback-btn" onclick="provideFeedback(this, 'helpful')" aria-label="Mark as helpful" title="This was helpful">
+                    👍
+                </button>
+                <button class="feedback-btn" onclick="provideFeedback(this, 'not-helpful')" aria-label="Mark as not helpful" title="This was not helpful">
+                    👎
+                </button>
+            `;
+            messageDiv.querySelector('.message-content').appendChild(feedbackDiv);
+        }
+        
+        function provideFeedback(btn, type) {
+            const messageId = Date.now();
+            if (feedbackGiven.has(messageId)) return;
+            
+            feedbackGiven.add(messageId);
+            btn.classList.add('active');
+            btn.style.color = 'var(--color-primary)';
+            
+            // Disable other feedback buttons in this message
+            const feedbackDiv = btn.parentElement;
+            Array.from(feedbackDiv.children).forEach(button => {
+                if (button !== btn) button.disabled = true;
+            });
+            
+            const message = type === 'helpful' ? 'Thank you for the feedback!' : 'I\'ll try to improve my responses.';
+            showToast('info', 'Feedback Received', message, 3000);
+            
+            logDebug('Feedback provided', { type, messageId });
+        }
+        
+        function announceToScreenReader(message) {
+            const announcement = document.createElement('div');
+            announcement.setAttribute('aria-live', 'assertive');
+            announcement.setAttribute('aria-atomic', 'true');
+            announcement.className = 'sr-only';
+            announcement.textContent = message;
+            
+            document.body.appendChild(announcement);
+            
+            setTimeout(() => {
+                document.body.removeChild(announcement);
+            }, 1000);
+        }
+
+        // Enhanced typing indicator with accessibility
+        function showTypingIndicator() {
+            // Remove existing typing indicator
+            removeTypingIndicator();
+            
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message ai typing-indicator';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.setAttribute('aria-label', 'AI Assistant is typing');
+            typingDiv.setAttribute('role', 'status');
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.textContent = '🤖';
+            
+            const dotsDiv = document.createElement('div');
+            dotsDiv.className = 'typing-dots';
+            dotsDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+            dotsDiv.setAttribute('aria-hidden', 'true');
+            
+            typingDiv.appendChild(avatarDiv);
+            typingDiv.appendChild(dotsDiv);
+            
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+            
+            logDebug('Typing indicator shown');
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        // Process user message
+        function processMessage(userMessage) {
+            // Add user message
+            addMessage('user', userMessage);
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate processing delay
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                // Check for escalation request
+                if (userMessage.toLowerCase().includes('create ticket') || userMessage.toLowerCase().includes('human support')) {
+                    handleEscalation();
+                    return;
+                }
+                
+                // Analyze message for issue type
+                const issueType = detectIssueType(userMessage);
+                
+                if (issueType) {
+                    const issue = knowledgeBase[issueType];
+                    addMessage('ai', issue.response);
+                    lastResponseType = issueType;
+                    
+                    // Add escalation option after main response
+                    setTimeout(() => {
+                        if (!awaitingEscalation) {
+                            addEscalationOption();
+                        }
+                    }, 1000);
+                } else {
+                    // Generic response
+                    addMessage('ai', "I understand you're experiencing a technical issue. Could you provide more details about what specifically is happening? For example:\n\n• What device or software is involved?\n• When did the problem start?\n• What error messages do you see?\n\nThis will help me provide more targeted assistance.");
+                    
+                    setTimeout(() => {
+                        if (!awaitingEscalation) {
+                            addEscalationOption();
+                        }
+                    }, 1000);
+                }
+            }, 1500); // Simulate AI processing time
+        }
+
+        // Detect issue type based on keywords
+        function detectIssueType(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            for (const [issueType, data] of Object.entries(knowledgeBase)) {
+                for (const keyword of data.keywords) {
+                    if (lowerMessage.includes(keyword.toLowerCase())) {
+                        return issueType;
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        // Add escalation option
+        function addEscalationOption() {
+            const escalationDiv = document.createElement('div');
+            escalationDiv.className = 'message ai';
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.textContent = '🤖';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            contentDiv.innerHTML = 'If these steps don\'t resolve your issue, I can help you create a support ticket for our human IT specialists.';
+            
+            const escalationBtn = document.createElement('button');
+            escalationBtn.className = 'escalation-btn';
+            escalationBtn.textContent = '🎫 Create Support Ticket';
+            escalationBtn.onclick = handleEscalation;
+            
+            escalationDiv.appendChild(avatarDiv);
+            contentDiv.appendChild(escalationBtn);
+            escalationDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(escalationDiv);
+            scrollToBottom();
+            
+            awaitingEscalation = true;
+        }
+
+        // Handle escalation to human support
+        function handleEscalation() {
+            // Pre-fill ticket form with conversation context
+            const conversationSummary = conversationHistory
+                .filter(msg => msg.type === 'user')
+                .map(msg => msg.content)
+                .join('\n');
+            
+            document.getElementById('ticketSummary').value = 'IT Support Request from Chat';
+            document.getElementById('ticketDescription').value = 'Issue discussed in chat:\n\n' + conversationSummary;
+            
+            openModal('ticketModal');
+            awaitingEscalation = false;
+        }
+
+        // Enhanced Quick Action Handler with modal support
+        function handleQuickAction(action) {
+            logDebug('Quick action triggered', { action });
+            
+            // Special actions that open modals
+            if (action === 'password-reset') {
+                addMessage('user', 'I need help with password reset');
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage('ai', '🔑 I\'ll help you reset your password! Let me guide you through our secure 3-step process.\n\nClick the button below to start the password reset wizard.');
+                    
+                    // Add action button in chat
+                    addActionButton('Start Password Reset', () => startPasswordReset());
+                }, 1000);
+                return;
+            }
+            
+            if (action === 'check-ticket') {
+                addMessage('user', 'I want to check my ticket status');
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage('ai', '🎫 I can help you check your ticket status! Please provide your ticket number (format: INC1234567, REQ1234567, or CHG1234567).');
+                    
+                    // Add action button in chat
+                    addActionButton('Open Ticket Status Checker', () => openModal('statusModal'));
+                }, 1000);
+                return;
+            }
+            
+            // Regular quick actions
+            const issue = knowledgeBase[action];
+            if (issue) {
+                const actionLabels = {
+                    'printer-issue': 'I\'m having printer issues',
+                    'email-problem': 'I need help with email problems',
+                    'network-issue': 'I\'m having network connectivity issues',
+                    'software-help': 'I need help with software problems'
+                };
+                
+                addMessage('user', actionLabels[action] || `I need help with ${action}`);
+                
+                showTypingIndicator();
+                
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage('ai', issue.response);
+                    lastResponseType = action;
+                    
+                    // Add follow-up question
+                    setTimeout(() => {
+                        addMessage('ai', issue.followUp);
+                        
+                        // Add escalation option
+                        setTimeout(() => {
+                            if (!awaitingEscalation) {
+                                addEscalationOption();
+                            }
+                        }, 1000);
+                    }, 1000);
+                }, userPreferences.responseDelay || 1500);
+            } else {
+                logDebug('Unknown quick action', { action });
+            }
+        }
+        
+        // Add action button to chat
+        function addActionButton(text, onClick) {
+            const buttonDiv = document.createElement('div');
+            buttonDiv.className = 'message ai';
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.textContent = '🤖';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            const actionBtn = document.createElement('button');
+            actionBtn.className = 'btn btn-primary';
+            actionBtn.textContent = text;
+            actionBtn.onclick = onClick;
+            actionBtn.style.marginTop = 'var(--space-8)';
+            
+            contentDiv.appendChild(actionBtn);
+            buttonDiv.appendChild(avatarDiv);
+            buttonDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(buttonDiv);
+            scrollToBottom();
+        }
+
+        // Send message function
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (message) {
+                processMessage(message);
+                messageInput.value = '';
+                adjustTextareaHeight();
+                awaitingEscalation = false;
+            }
+        }
+
+        // Start new conversation
+        function startNewConversation() {
+            chatMessages.innerHTML = '';
+            conversationHistory = [];
+            lastResponseType = null;
+            awaitingEscalation = false;
+            initChat();
+        }
+
+        // Scroll to bottom of chat
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Enhanced textarea height adjustment
+        function adjustTextareaHeight() {
+            messageInput.style.height = 'auto';
+            const newHeight = Math.min(messageInput.scrollHeight, 120);
+            messageInput.style.height = newHeight + 'px';
+            
+            // Auto-scroll chat if textarea grows
+            if (newHeight > 44) {
+                scrollToBottom();
+            }
+        }
+
+        // Enhanced event listeners with accessibility support
+        document.addEventListener('DOMContentLoaded', function() {
+            initChat();
+            
+            // Enhanced keyboard shortcuts and accessibility
+            document.addEventListener('keydown', function(e) {
+                // Escape key handling
+                if (e.key === 'Escape') {
+                    // Close any open modals
+                    document.querySelectorAll('.modal-backdrop.active').forEach(modal => {
+                        closeModal(modal.id);
+                    });
+                    
+                    // Close debug console
+                    const debugConsole = document.getElementById('debugConsole');
+                    if (debugConsole?.classList.contains('active')) {
+                        debugConsole.classList.remove('active');
+                    }
+                }
+                
+                // Ctrl+Shift+D for debug mode
+                if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+                    e.preventDefault();
+                    showDebugMode();
+                }
+                
+                // Ctrl+N for new conversation
+                if (e.ctrlKey && e.key === 'n') {
+                    e.preventDefault();
+                    startNewConversation();
+                }
+                
+                // Ctrl+E to focus input
+                if (e.ctrlKey && e.key === 'e') {
+                    e.preventDefault();
+                    messageInput.focus();
+                }
+                
+                // Alt+S for settings
+                if (e.altKey && e.key === 's') {
+                    e.preventDefault();
+                    openModal('settingsModal');
+                }
+            });
+            
+            // Input field events with better UX
+            messageInput.addEventListener('input', function() {
+                adjustTextareaHeight();
+                
+                // Enable/disable send button based on content
+                const hasContent = this.value.trim().length > 0;
+                sendBtn.disabled = !hasContent;
+                sendBtn.style.opacity = hasContent ? '1' : '0.6';
+            });
+            
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Enhanced send button
+            sendBtn.addEventListener('click', sendMessage);
+            
+            // Settings button
+            settingsBtn.addEventListener('click', () => {
+                logDebug('Settings opened via button');
+                openModal('settingsModal');
+            });
+            
+            // Close modals on backdrop click
+            document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+                backdrop.addEventListener('click', (e) => {
+                    if (e.target === backdrop) {
+                        closeModal(backdrop.id);
+                    }
+                });
+            });
+            
+            // Add focus management for modals
+            document.querySelectorAll('.modal').forEach(modal => {
+                const firstFocusable = modal.querySelector('input, button, textarea, select, [tabindex]:not([tabindex="-1"])');
+                if (firstFocusable) {
+                    modal.addEventListener('shown', () => {
+                        firstFocusable.focus();
+                    });
+                }
+            });
+            
+            // Voice input placeholder (for future implementation)
+            document.querySelector('.voice-input-btn')?.addEventListener('click', showVoiceNotAvailable);
+            
+            logDebug('Event listeners initialized');
+        });
+        
+        function showVoiceNotAvailable() {
+            showToast('info', 'Voice Input', 'Voice input feature will be available in a future update. For now, please type your message.', 4000);
+        }
+        
+        function exportConversation() {
+            if (conversationHistory.length === 0) {
+                showToast('warning', 'No Conversation', 'No conversation to export yet.');
+                return;
+            }
+            
+            const timestamp = new Date().toISOString().split('T')[0];
+            const filename = `IT_Helpdesk_Conversation_${timestamp}.txt`;
+            
+            let exportText = `IT Helpdesk Conversation Export\n`;
+            exportText += `Generated: ${new Date().toLocaleString()}\n`;
+            exportText += `Total Messages: ${conversationHistory.length}\n\n`;
+            exportText += `${'='.repeat(50)}\n\n`;
+            
+            conversationHistory.forEach((msg, index) => {
+                const speaker = msg.type === 'ai' ? 'AI Assistant' : 'User';
+                const time = msg.timestamp.toLocaleTimeString();
+                exportText += `${index + 1}. [${time}] ${speaker}:\n${msg.content}\n\n`;
+            });
+            
+            // Create and download file
+            const blob = new Blob([exportText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            
+            showToast('success', 'Export Complete', `Conversation exported as ${filename}`);
+            logDebug('Conversation exported', { messageCount: conversationHistory.length });
+        }
+        
+        // Modal management functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Enhanced Settings functions
+        function loadSettings() {
+            // Auto-load ServiceNow as default platform
+            document.getElementById('itsmPlatform').value = 'servicenow';
+            updatePlatformFields();
+            updateIntegrationStatus();
+            updateModalStatus();
+            logDebug('Settings loaded', itsmConfig);
+        }
+        
+        function updatePlatformFields() {
+            const platform = document.getElementById('itsmPlatform').value;
+            const serviceNowFields = document.getElementById('serviceNowFields');
+            const genericFields = document.getElementById('genericFields');
+            const serviceNowBranding = document.getElementById('serviceNowBranding');
+            const serviceNowActions = document.querySelectorAll('.servicenow-action');
+            
+            if (platform === 'servicenow') {
+                serviceNowFields.style.display = 'block';
+                genericFields.style.display = 'none';
+                if (itsmConfig.connected) {
+                    serviceNowBranding.classList.add('active');
+                    serviceNowActions.forEach(action => action.style.display = 'block');
+                }
+            } else {
+                serviceNowFields.style.display = 'none';
+                genericFields.style.display = 'block';
+                serviceNowBranding.classList.remove('active');
+                serviceNowActions.forEach(action => action.style.display = 'none');
+            }
+            
+            logDebug('Platform fields updated', { platform });
+        }
+        
+        function updateModalStatus() {
+            const modalStatusDot = document.getElementById('modalStatusDot');
+            const modalStatusText = document.getElementById('modalStatusText');
+            const modalStatusDetails = document.getElementById('modalStatusDetails');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            
+            if (itsmConfig.connected && itsmConfig.platform) {
+                modalStatusDot.className = 'status-dot green';
+                modalStatusText.textContent = `Connected to ${getPlatformName(itsmConfig.platform)}`;
+                disconnectBtn.style.display = 'inline-flex';
+                
+                if (itsmConfig.lastChecked) {
+                    const timeDiff = (new Date() - itsmConfig.lastChecked) / (1000 * 60);
+                    const timeText = timeDiff < 1 ? 'Just now' : `${Math.floor(timeDiff)}m ago`;
+                    modalStatusDetails.textContent = `Last checked: ${timeText}`;
+                } else {
+                    modalStatusDetails.textContent = 'Last checked: Never';
+                }
+            } else {
+                modalStatusDot.className = 'status-dot gray';
+                modalStatusText.textContent = 'Not Connected';
+                modalStatusDetails.textContent = 'Configure your ITSM integration to get started';
+                disconnectBtn.style.display = 'none';
+            }
+        }
+        
+        function refreshConnection() {
+            if (!itsmConfig.connected) {
+                showToast('warning', 'No Connection', 'Please configure and test your ITSM connection first.');
+                return;
+            }
+            
+            const refreshBtn = document.getElementById('refreshBtn');
+            const originalText = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = '<span class="loading-spinner"></span> Checking...';
+            refreshBtn.disabled = true;
+            
+            setTimeout(() => {
+                itsmConfig.lastChecked = new Date();
+                updateModalStatus();
+                updateStats();
+                refreshBtn.innerHTML = originalText;
+                refreshBtn.disabled = false;
+                showToast('success', 'Connection Refreshed', 'ITSM connection status updated successfully.');
+                logDebug('Connection refreshed');
+            }, 1500);
+        }
+        
+        function updateIntegrationStatus() {
+            if (itsmConfig.connected && itsmConfig.platform) {
+                statusDot.className = 'status-dot green';
+                statusText.textContent = `Connected to ${getPlatformName(itsmConfig.platform)}`;
+                
+                // Show ServiceNow-specific quick actions
+                if (itsmConfig.platform === 'servicenow') {
+                    document.querySelectorAll('.servicenow-action').forEach(action => {
+                        action.style.display = 'block';
+                    });
+                    document.getElementById('serviceNowBranding')?.classList.add('active');
+                }
+            } else {
+                statusDot.className = 'status-dot gray';
+                statusText.textContent = 'Not Connected';
+                
+                // Hide ServiceNow-specific quick actions
+                document.querySelectorAll('.servicenow-action').forEach(action => {
+                    action.style.display = 'none';
+                });
+                document.getElementById('serviceNowBranding')?.classList.remove('active');
+            }
+            
+            updateStats();
+        }
+        
+        function getPlatformName(platform) {
+            const names = {
+                'servicenow': 'ServiceNow',
+                'jira': 'Jira Service Management',
+                'freshservice': 'Freshservice',
+                'zendesk': 'Zendesk',
+                'manageengine': 'ManageEngine',
+                'other': 'Custom Platform'
+            };
+            return names[platform] || 'Unknown Platform';
+        }
+        
+        async function testConnection() {
+            const btn = document.getElementById('testConnectionBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading-spinner"></span> Testing...';
+            btn.disabled = true;
+            
+            const platform = document.getElementById('itsmPlatform').value;
+            let config = { platform, timeout: parseInt(document.getElementById('timeout').value) };
+            
+            // Validation
+            if (!platform) {
+                showToast('error', 'Validation Error', 'Please select an ITSM platform.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+            
+            if (platform === 'servicenow') {
+                config.instanceUrl = document.getElementById('instanceUrl').value;
+                config.authType = document.getElementById('authType').value;
+                config.username = document.getElementById('username').value;
+                config.password = document.getElementById('password').value;
+                
+                if (!config.instanceUrl || !config.username || !config.password) {
+                    showToast('error', 'Validation Error', 'Please fill in all required ServiceNow fields.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+            } else {
+                config.endpoint = document.getElementById('apiEndpoint').value;
+                config.apiKey = document.getElementById('apiKey').value;
+                config.authType = document.getElementById('authType').value;
+                
+                if (!config.endpoint || !config.apiKey) {
+                    showToast('error', 'Validation Error', 'Please fill in all required fields.');
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    return;
+                }
+            }
+            
+            try {
+                const result = await itsmAPI.testConnection(config);
+                
+                if (result.success) {
+                    showToast('success', 'Connection Successful', result.message);
+                    addMessage('ai', `${result.message}\nPlatform: ${getPlatformName(config.platform)}\nResponse time: ${result.responseTime}ms\n\nYour integration is ready to use.`);
+                } else {
+                    showToast('error', 'Connection Failed', result.message);
+                    addMessage('ai', `${result.message}\n\nPlease check your settings and try again.`);
+                }
+            } catch (error) {
+                showToast('error', 'Connection Error', error.message);
+                addMessage('ai', `❌ Connection test failed: ${error.message}`);
+            }
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+        
+        function saveSettings() {
+            const platform = document.getElementById('itsmPlatform').value;
+            
+            if (!platform) {
+                showToast('error', 'Validation Error', 'Please select an ITSM platform.');
+                return;
+            }
+            
+            let config = {
+                platform,
+                timeout: parseInt(document.getElementById('timeout').value),
+                connected: false,
+                lastChecked: new Date()
+            };
+            
+            if (platform === 'servicenow') {
+                config.instanceUrl = document.getElementById('instanceUrl').value;
+                config.authType = document.getElementById('authType').value;
+                config.username = document.getElementById('username').value;
+                config.password = document.getElementById('password').value;
+                
+                if (!config.instanceUrl || !config.username || !config.password) {
+                    showToast('error', 'Validation Error', 'Please fill in all required ServiceNow fields.');
+                    return;
+                }
+                config.connected = true;
+            } else {
+                config.endpoint = document.getElementById('apiEndpoint').value;
+                config.apiKey = document.getElementById('apiKey').value;
+                config.authType = document.getElementById('authType').value;
+                
+                if (!config.endpoint || !config.apiKey) {
+                    showToast('error', 'Validation Error', 'Please fill in all required fields.');
+                    return;
+                }
+                config.connected = true;
+            }
+            
+            // Save user preferences
+            userPreferences.autoEscalate = document.getElementById('autoEscalate').checked;
+            userPreferences.showTimestamps = document.getElementById('showTimestamps').checked;
+            userPreferences.responseDelay = parseInt(document.getElementById('responseDelay').value);
+            userPreferences.emailNotifications = document.getElementById('emailNotifications').checked;
+            userPreferences.browserNotifications = document.getElementById('browserNotifications').checked;
+            userPreferences.soundAlerts = document.getElementById('soundAlerts').checked;
+            
+            itsmConfig = { ...itsmConfig, ...config };
+            
+            updateIntegrationStatus();
+            updateModalStatus();
+            closeModal('settingsModal');
+            
+            showToast('success', 'Settings Saved', `ITSM integration configured for ${getPlatformName(platform)}.`);
+            
+            const endpoint = platform === 'servicenow' ? config.instanceUrl : config.endpoint;
+            addMessage('ai', `🎉 ITSM integration configured successfully!\n\nPlatform: ${getPlatformName(platform)}\nEndpoint: ${endpoint}\n\nYou can now create tickets that will be submitted directly to your ITSM platform.`);
+            
+            logDebug('Settings saved', { platform, connected: config.connected });
+        }
+        
+        function disconnectITSM() {
+            if (confirm('Are you sure you want to disconnect from the ITSM platform?')) {
+                itsmConfig.connected = false;
+                itsmConfig.lastChecked = null;
+                
+                updateIntegrationStatus();
+                updateModalStatus();
+                
+                showToast('info', 'Disconnected', 'ITSM integration has been disconnected.');
+                addMessage('ai', '🔌 ITSM integration has been disconnected. You can reconnect anytime through the settings.');
+                
+                logDebug('ITSM disconnected');
+            }
+        }
+        
+        function clearSettings() {
+            if (confirm('Are you sure you want to clear all integration settings?')) {
+                itsmConfig = {
+                    platform: 'servicenow',
+                    instanceUrl: '',
+                    authType: 'oauth2',
+                    username: '',
+                    password: '',
+                    timeout: 30,
+                    connected: false,
+                    lastChecked: null
+                };
+                
+                updateIntegrationStatus();
+                updateModalStatus();
+                
+                // Reset form
+                document.getElementById('itsmSettingsForm').reset();
+                document.getElementById('itsmPlatform').value = 'servicenow';
+                document.getElementById('authType').value = 'oauth2';
+                document.getElementById('timeout').value = '30';
+                updatePlatformFields();
+                
+                showToast('info', 'Settings Cleared', 'All integration settings have been reset.');
+                addMessage('ai', '🗑️ Integration settings have been cleared.');
+                
+                logDebug('Settings cleared');
+            }
+        }
+        
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                button.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                button.textContent = '👁️';
+            }
+        }
+        
+        // Ticket management functions
+        async function submitTicket() {
+            const btn = document.getElementById('submitTicketBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading-spinner"></span> Submitting...';
+            btn.disabled = true;
+            
+            if (!itsmConfig.connected) {
+                alert('Please configure ITSM integration first.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                return;
+            }
+            
+            const ticketData = {
+                summary: document.getElementById('ticketSummary').value,
+                description: document.getElementById('ticketDescription').value,
+                priority: document.getElementById('ticketPriority').value,
+                category: document.getElementById('ticketCategory').value,
+                name: document.getElementById('userName').value,
+                email: document.getElementById('userEmail').value,
+                phone: document.getElementById('userPhone').value,
+                department: document.getElementById('userDepartment').value,
+                additionalDetails: document.getElementById('additionalDetails').value
+            };
+            
+            try {
+                const result = await itsmAPI.createTicket(ticketData);
+                
+                if (result.success) {
+                    closeModal('ticketModal');
+                    showTicketSuccess(result);
+                    document.getElementById('ticketForm').reset();
+                }
+            } catch (error) {
+                alert('Failed to create ticket: ' + error.message);
+            }
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+        
+        function showTicketSuccess(result) {
+            addMessage('ai', `✅ Support ticket created successfully!\n\nTicket ID: ${result.ticketId}\nAssigned to: ${result.assignedAgent.name}\nEstimated resolution: ${result.estimatedResolution}\nTracking URL: ${result.trackingUrl}\n\n${result.nextSteps}`);
+        }
+        
+        async function lookupTicket() {
+            const btn = document.getElementById('lookupBtn');
+            const ticketNumber = document.getElementById('ticketNumber').value.trim();
+            
+            if (!ticketNumber) {
+                alert('Please enter a ticket number.');
+                return;
+            }
+            
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading-spinner"></span> Looking up...';
+            btn.disabled = true;
+            
+            try {
+                const result = await itsmAPI.getTicketStatus(ticketNumber);
+                
+                if (result.success) {
+                    displayTicketDetails(result.ticket);
+                }
+            } catch (error) {
+                alert('Failed to lookup ticket: ' + error.message);
+            }
+            
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
+        
+        function displayTicketDetails(ticket) {
+            const inputForm = document.getElementById('statusInputForm');
+            const detailsDiv = document.getElementById('ticketDetails');
+            
+            inputForm.style.display = 'none';
+            detailsDiv.style.display = 'block';
+            
+            const createdDate = new Date(ticket.created).toLocaleString();
+            const updatedDate = new Date(ticket.updated).toLocaleString();
+            
+            detailsDiv.innerHTML = `
+                <div class="ticket-info">
+                    <h4>Ticket ${ticket.id}</h4>
+                    <div style="margin: var(--space-16) 0;">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); margin-bottom: var(--space-16);">
+                            <div>
+                                <strong>Status:</strong>
+                                <span class="status-badge status-${ticket.status.toLowerCase().replace(' ', '-')}">
+                                    ${ticket.status}
+                                </span>
+                            </div>
+                            <div>
+                                <strong>Priority:</strong>
+                                <span class="priority-${ticket.priority.toLowerCase()}">${ticket.priority}</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); margin-bottom: var(--space-16);">
+                            <div><strong>Category:</strong> ${ticket.category}</div>
+                            <div><strong>Assigned to:</strong> ${ticket.assignee}</div>
+                        </div>
+                        
+                        <div style="margin-bottom: var(--space-16);">
+                            <strong>Description:</strong><br>
+                            ${ticket.description}
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-16); margin-bottom: var(--space-16);">
+                            <div><strong>Created:</strong> ${createdDate}</div>
+                            <div><strong>Last Updated:</strong> ${updatedDate}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ticket-timeline">
+                        <h4>Activity Timeline</h4>
+                        ${ticket.timeline.map(item => `
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <div class="timeline-time">${new Date(item.time).toLocaleString()}</div>
+                                    <div>${item.action}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    ${ticket.resolved && ticket.satisfactionRating ? `
+                        <div style="margin-top: var(--space-16); padding: var(--space-12); background: var(--color-bg-3); border-radius: var(--radius-base);">
+                            <strong>Ticket Resolved!</strong><br>
+                            Please rate your satisfaction with the resolution:
+                            <div style="margin-top: var(--space-8);">
+                                <button class="btn btn-secondary" style="margin-right: var(--space-8);">😄 Satisfied</button>
+                                <button class="btn btn-secondary">😐 Needs Improvement</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+                
+                <div style="margin-top: var(--space-20);">
+                    <button class="btn btn-secondary" onclick="resetTicketLookup()">Look Up Another Ticket</button>
+                    <button class="btn btn-primary" onclick="closeModal('statusModal')">Close</button>
+                </div>
+            `;
+        }
+        
+        function resetTicketLookup() {
+            document.getElementById('statusInputForm').style.display = 'block';
+            document.getElementById('ticketDetails').style.display = 'none';
+            document.getElementById('ticketNumber').value = '';
+        }
+        
+        // Help modal functions
+        function openHelpModal() {
+            closeModal('settingsModal');
+            openModal('helpModal');
+        }
+        
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+        // Enhanced message processing with better intelligence
+        function processMessage(userMessage) {
+            messageExchangeCount++;
+            
+            // Check if user is asking about existing ticket
+            const ticketPattern = /(INC|REQ|CHG)\d{7}/i;
+            const ticketMatch = userMessage.match(ticketPattern);
+            
+            if (ticketMatch) {
+                const ticketId = ticketMatch[0].toUpperCase();
+                addMessage('user', userMessage);
+                
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage('ai', `🔍 I can help you check the status of ticket ${ticketId}. Let me look that up for you.`);
+                    
+                    // Auto-populate and lookup ticket
+                    document.getElementById('ticketNumber').value = ticketId;
+                    setTimeout(() => {
+                        openModal('statusModal');
+                        lookupTicket();
+                    }, 1000);
+                }, 1000);
+                return;
+            }
+            
+            // Check for escalation keywords
+            if (userMessage.toLowerCase().includes('create ticket') || 
+                userMessage.toLowerCase().includes('human support') ||
+                userMessage.toLowerCase().includes('escalate') ||
+                userMessage.toLowerCase().includes('agent')) {
+                addMessage('user', userMessage);
+                handleEscalation();
+                return;
+            }
+            
+            // Check for greeting patterns
+            const greetingPattern = /^(hi|hello|hey|good morning|good afternoon|good evening)/i;
+            if (greetingPattern.test(userMessage.trim())) {
+                addMessage('user', userMessage);
+                showTypingIndicator();
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    const greeting = getTimeBasedGreeting();
+                    addMessage('ai', `${greeting} How can I assist you with your IT needs today? You can:\n\n• Use the quick action buttons below\n• Describe your issue in detail\n• Check existing ticket status\n• Get help with common problems\n\nWhat would you like help with?`);
+                }, 800);
+                return;
+            }
+            
+            // Add user message
+            addMessage('user', userMessage);
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Analyze message and provide intelligent response
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                const issueType = detectIssueType(userMessage);
+                
+                if (issueType) {
+                    const issue = knowledgeBase[issueType];
+                    addMessage('ai', issue.response);
+                    lastResponseType = issueType;
+                    
+                    // Add follow-up after main response
+                    setTimeout(() => {
+                        addMessage('ai', issue.followUp);
+                        
+                        // Auto-escalate after multiple failed attempts
+                        if (userPreferences.autoEscalate && messageExchangeCount >= 6 && !awaitingEscalation) {
+                            setTimeout(() => {
+                                addMessage('ai', '🤔 I notice we\'ve been troubleshooting for a while. Would you like me to escalate this to a human specialist who can provide more targeted assistance?');
+                                addEscalationOption();
+                            }, 2000);
+                        } else if (!awaitingEscalation) {
+                            setTimeout(() => {
+                                addEscalationOption();
+                            }, 1500);
+                        }
+                    }, 1000);
+                } else {
+                    // Provide contextual help based on message content
+                    const contextualResponse = generateContextualResponse(userMessage);
+                    addMessage('ai', contextualResponse);
+                    
+                    setTimeout(() => {
+                        if (!awaitingEscalation) {
+                            addEscalationOption();
+                        }
+                    }, 1500);
+                }
+            }, userPreferences.responseDelay);
+        }
+        
+        function getTimeBasedGreeting() {
+            const hour = new Date().getHours();
+            if (hour < 12) return '🌅 Good morning!';
+            if (hour < 17) return '🌞 Good afternoon!';
+            return '🌆 Good evening!';
+        }
+        
+        function generateContextualResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Error message patterns
+            if (lowerMessage.includes('error') || lowerMessage.includes('failed') || lowerMessage.includes('not working')) {
+                return "🚨 I understand you're encountering an error. To help you better, could you provide:\n\n• The exact error message (if any)\n• What you were trying to do when it happened\n• What device/software you're using\n• When this started occurring\n\nThis information will help me provide more specific troubleshooting steps.";
+            }
+            
+            // Performance issues
+            if (lowerMessage.includes('slow') || lowerMessage.includes('lag') || lowerMessage.includes('freeze')) {
+                return "🐌 I can help with performance issues! Let's start with these quick checks:\n\n1. ⚡ Check Task Manager (Ctrl+Shift+Esc) for high CPU usage\n2. ⚡ Close unnecessary programs and browser tabs\n3. ⚡ Restart your device if it's been running for days\n4. ⚡ Check available disk space (should have 15%+ free)\n\nWhich device is running slowly - computer, phone, or tablet?";
+            }
+            
+            // Installation issues
+            if (lowerMessage.includes('install') || lowerMessage.includes('setup')) {
+                return "💾 I can help with installation issues! Common solutions:\n\n1. 🔒 Run installer as Administrator (right-click → 'Run as administrator')\n2. 🔒 Temporarily disable antivirus during installation\n3. 🔒 Clear temporary files and restart\n4. 🔒 Check system requirements\n\nWhat software are you trying to install?";
+            }
+            
+            // Generic but helpful response
+            return "I understand you're experiencing a technical issue. To provide the best assistance, could you tell me:\n\n• What specific problem are you having?\n• What device or application is involved?\n• Have you tried any troubleshooting steps already?\n• Is this a new issue or ongoing problem?\n\nYou can also use the quick action buttons below for common issues like password resets, printer problems, or email issues.";
+        }
+        
+        // Enhanced escalation option with better UX
+        function addEscalationOption() {
+            if (awaitingEscalation) return; // Prevent duplicate escalation options
+            
+            const escalationDiv = document.createElement('div');
+            escalationDiv.className = 'message ai';
+            escalationDiv.setAttribute('role', 'log');
+            
+            const avatarDiv = document.createElement('div');
+            avatarDiv.className = 'message-avatar';
+            avatarDiv.textContent = '🤖';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+            
+            if (itsmConfig.connected) {
+                contentDiv.innerHTML = `If these steps don't resolve your issue, I can create a priority support ticket directly in ${getPlatformName(itsmConfig.platform)} for our IT specialists.`;
+                
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.marginTop = 'var(--space-12)';
+                
+                const escalationBtn = document.createElement('button');
+                escalationBtn.className = 'btn btn-primary';
+                escalationBtn.innerHTML = '🎫 Create Support Ticket';
+                escalationBtn.onclick = handleEscalation;
+                escalationBtn.setAttribute('aria-describedby', 'escalation-help');
+                
+                const helpBtn = document.createElement('button');
+                helpBtn.className = 'btn btn-secondary';
+                helpBtn.innerHTML = '📞 Call IT Helpdesk';
+                helpBtn.onclick = () => showContactInfo();
+                helpBtn.style.marginLeft = 'var(--space-8)';
+                
+                buttonContainer.appendChild(escalationBtn);
+                buttonContainer.appendChild(helpBtn);
+                contentDiv.appendChild(buttonContainer);
+                
+                const helpText = document.createElement('small');
+                helpText.id = 'escalation-help';
+                helpText.style.display = 'block';
+                helpText.style.marginTop = 'var(--space-8)';
+                helpText.style.color = 'var(--color-text-secondary)';
+                helpText.textContent = 'Tickets are typically resolved within 1-2 hours for high priority issues.';
+                contentDiv.appendChild(helpText);
+            } else {
+                contentDiv.innerHTML = `If these steps don't resolve your issue, I can help you create a support ticket.`;
+                
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.marginTop = 'var(--space-12)';
+                
+                const configBtn = document.createElement('button');
+                configBtn.className = 'btn btn-secondary';
+                configBtn.innerHTML = '⚙️ Configure ITSM Integration';
+                configBtn.onclick = () => openModal('settingsModal');
+                
+                const manualBtn = document.createElement('button');
+                manualBtn.className = 'btn btn-primary';
+                manualBtn.innerHTML = '📞 Contact IT Manually';
+                manualBtn.onclick = () => showContactInfo();
+                manualBtn.style.marginLeft = 'var(--space-8)';
+                
+                buttonContainer.appendChild(configBtn);
+                buttonContainer.appendChild(manualBtn);
+                contentDiv.appendChild(buttonContainer);
+            }
+            
+            escalationDiv.appendChild(avatarDiv);
+            escalationDiv.appendChild(contentDiv);
+            
+            chatMessages.appendChild(escalationDiv);
+            scrollToBottom();
+            
+            awaitingEscalation = true;
+            logDebug('Escalation option added', { connected: itsmConfig.connected });
+        }
+        
+        function showContactInfo() {
+            addMessage('ai', '📞 **IT Helpdesk Contact Information**\n\n📞 Phone: (555) 123-HELP (4357)\n📧 Email: helpdesk@company.com\n🕰️ Hours: Mon-Fri 8:00 AM - 6:00 PM\n🌐 Portal: helpdesk.company.com\n\n**For emergencies outside business hours:**\n🔴 Emergency Line: (555) 911-HELP\n📧 Emergency Email: emergency@company.com\n\n*Please mention ticket reference if you have one.*', true, { noFeedback: false });
+        }
+        
+        // ServiceNow-specific action handler
+        function handleServiceNowAction(action) {
+            if (!itsmConfig.connected || itsmConfig.platform !== 'servicenow') {
+                showToast('warning', 'ServiceNow Required', 'Please configure ServiceNow integration first.');
+                openModal('settingsModal');
+                return;
+            }
+            
+            switch (action) {
+                case 'view_tickets':
+                    viewMyTickets();
+                    break;
+                case 'kb_search':
+                    knowledgeBaseSearch();
+                    break;
+                default:
+                    logDebug('Unknown ServiceNow action', { action });
+            }
+        }
+        
+        function viewMyTickets() {
+            addMessage('user', 'Show me my ServiceNow tickets');
+            
+            showTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                const mockTickets = [
+                    { id: 'INC0012345', status: 'In Progress', priority: 'High', summary: 'VPN connection issues' },
+                    { id: 'REQ0067890', status: 'Approved', priority: 'Medium', summary: 'Software installation request' },
+                    { id: 'CHG0011111', status: 'Pending', priority: 'Low', summary: 'System maintenance window' }
+                ];
+                
+                let ticketList = 'Here are your recent ServiceNow tickets:\n\n';
+                mockTickets.forEach(ticket => {
+                    ticketList += `📋 ${ticket.id} - ${ticket.summary}\n   Status: ${ticket.status} | Priority: ${ticket.priority}\n\n`;
+                });
+                
+                ticketList += 'Click "Check Status" to view detailed information about any ticket.';
+                
+                addMessage('ai', ticketList);
+                logDebug('ServiceNow tickets displayed', { count: mockTickets.length });
+            }, userPreferences.responseDelay);
+        }
+        
+        function knowledgeBaseSearch() {
+            addMessage('user', 'Search ServiceNow knowledge base');
+            
+            showTypingIndicator();
+            setTimeout(() => {
+                removeTypingIndicator();
+                
+                const kbArticles = [
+                    { id: 'KB0001234', title: 'How to reset your password', votes: 156 },
+                    { id: 'KB0001235', title: 'VPN setup and troubleshooting guide', votes: 89 },
+                    { id: 'KB0001236', title: 'Email configuration for mobile devices', votes: 234 },
+                    { id: 'KB0001237', title: 'Printer installation and driver updates', votes: 67 }
+                ];
+                
+                let kbList = 'Here are the most helpful ServiceNow knowledge base articles:\n\n';
+                kbArticles.forEach(article => {
+                    kbList += `📚 ${article.id} - ${article.title}\n   👍 ${article.votes} helpful votes\n\n`;
+                });
+                
+                kbList += 'These articles can help resolve common IT issues quickly!';
+                
+                addMessage('ai', kbList);
+                logDebug('ServiceNow KB articles displayed', { count: kbArticles.length });
+            }, userPreferences.responseDelay);
+        }
+    </script>
+</body>
+</html>
